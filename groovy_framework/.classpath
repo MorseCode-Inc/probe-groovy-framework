@@ -3,5 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="groovy_framework/plugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="build/lib/groovy-all-2.4.3.jar"/>
+	<classpathentry kind="lib" path="build/lib/lib.json.jar"/>
+	<classpathentry kind="lib" path="build/lib/nimsoft.jar"/>
+	<classpathentry kind="lib" path="build/lib/Twofish.jar"/>
+	<classpathentry kind="lib" path="build/lib/tomcat-embed-core.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/probe-http-gateway"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
