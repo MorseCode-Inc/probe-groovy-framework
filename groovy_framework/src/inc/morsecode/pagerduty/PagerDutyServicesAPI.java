@@ -86,7 +86,7 @@ public class PagerDutyServicesAPI {
 		
 		JsonObject data= client.call(GET, "/api/v1/services", null, params);
 		
-		JsonArray array= data.get("services", new JsonArray());
+		JsonArray array= (JsonArray)data.get("services", new JsonArray());
 		ListResult<PDService> services= new ListResult<PDService>(data.get("total", 0));
 		
 		for(JsonValue obj : array) {

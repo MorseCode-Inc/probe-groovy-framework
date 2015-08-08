@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="build/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/lib.json.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/lib.json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
