@@ -1,33 +1,117 @@
 package inc.morsecode.pagerduty;
 
 
+import inc.morsecode.NDS;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import util.security.Crypto;
 import util.security.codecs.SecurityCodec;
 
 import com.nimsoft.nimbus.NimException;
+import com.nimsoft.nimbus.NimRequest;
+import com.nimsoft.nimbus.NimSession;
+import com.nimsoft.nimbus.NimSubscribe;
+import com.nimsoft.nimbus.NimUserLogin;
+import com.nimsoft.nimbus.PDS;
 
-public class Probe extends HttpGateway {
+public class Probe extends HttpGateway implements MessageHandler {
 
 	private QueueSubscription subscription;
+	private boolean started= false;
+	private int failures= 0;
+	private boolean firstboot= true;
+	
 	
 	public Probe(String[] args) throws NimException {
 		super(args);
 	}
 	
+	private boolean doOnce() {
+		// try and connect to pager duty, see if we have our configuration setup correctly.
+		
+		NDS pd= config.seek("pagerduty");
+		
+		String apiKey= pd.get("auth/api_key", "missing configuration key pagerduty/auth/api_key");
+		String subdomain= pd.get("auth/api_key", "missing configuration key pagerduty/auth/api_key");
+		
+		boolean isConfigured= pd.get("auth/confirmed", false);
+		
+		if (!isConfigured) { 
+			log.info("Must configure probe with api credentials before it will function, refer to the Probe User Guide.");
+			return false; 
+		}
+		
+		
+		
+		return true;
+		
+	}
+	
 	
 	public void probeCycle() {
 		
-		if (subscription == null || !subscription.isOk()) {
-			subscription= new QueueSubscription("pagerduty_gtw", config.get("", "pagerduty"), config.get("bulk_size", 1));
+		if (!started && firstboot) {
+			firstboot= false;
+			//do whatever we may need to, once!
+			if (firstboot= !doOnce()) {
+				
+				return;
+			}
 		}
 		
-		try {
-			subscription.subscribe();
-		} catch (NimException nx) {
-			log.error("Queue Subscription Failure: "+ nx.getMessage());
+		
+		// NimSubscribe subscription= new NimSubscribe("/UIM/MORSECODE");
+		// subscription.subscribeForQueue(queuename, object, methodname);
+		
+		String clientName = "pagerduty_gtw";
+		String queue = config.get("setup/subscription/queue", "pagerduty");
+		int bulkSize = config.get("setup/subscription/bulk_size", 1);
+		
+		String address= config.get("setup/subscription/address", "/invalid/uim/address");
+			
+		if (subscription == null) {
+			subscription= new QueueSubscription(address, clientName, queue, bulkSize);
+		} 
+		
+		subscription.register(this);
+		
+		if (!subscription.isOk()) {
+			try {
+				subscription.subscribe();
+				log.info("Subscription to queue "+ address +":"+ queue +" established.");
+				started= true;
+			} catch (NimException nx) {
+				if (nx.getCode() == 1) { 
+					
+				} else if (nx.getCode() == 4) {
+					log.error("Queue Subscription Failure "+ address +" queue="+ queue +" [Not Found]");
+					log.error("Possible Causes:");
+					log.error("\t1) Check that an attach queue exists on hub: "+ address +" named '"+ queue +"'");
+					log.error("\t2) The configuration of this probe does not match your environment.");
+				} else {
+					log.error("Queue Subscription Failure "+ address +" queue="+ queue +" ["+ nx.getMessage() +"]");
+					log.error("Possible Causes:");
+					log.error("\t1) Reset the admin credentials for this probe using callback: set_admin");
+					log.error("\t2) The configuration of this probe does not match your environment.");
+				}
+			}
 		}
+		
+		if (!started) {
+			
+			
+			if (failures > 3) {
+				// something isnt configured correctly
+				log.fatal("Aborting probe startup due to failures.  Check configurations for admin and queue subscription.");
+				System.exit(1);
+			}
+			
+			failures++;
+			
+			
+		}
+		
 	}
 	
 	public static void main(String[] args) {
@@ -43,6 +127,7 @@ public class Probe extends HttpGateway {
   			System.out.println("Loading...");
   			probe.registerCallback(probe, "reload", "reload");
   			probe.registerCallback(probe, "set_admin", "set_admin", new String[]{"username", "password", "confirm"});
+  			probe.registerCallback(probe, "set_api", "set_api", new String[]{"subdomain", "api_key", "tld"});
   		
 
   			probe.registerCallbackOnTimer(probe, "execute", 3000, true);
@@ -64,6 +149,88 @@ public class Probe extends HttpGateway {
 	}
 
 	
+	@Override
+	public boolean handle(UIMMessage message) {
+		
+		if ("alarm".equals(message.getSubject())) {
+		} else if ("alarm_new".equals(message.getSubject())) {
+		} else if ("alarm_update".equals(message.getSubject())) {
+		} else if ("alarm_assign".equals(message.getSubject())) {
+		} else if ("alarm_close".equals(message.getSubject())) {
+			
+		}
+		System.out.println(message.getSubject());
+		
+		
+		return true;
+	}
+	
+	
+
+	public void set_api(NimSession session, String subdomain, String api_token, String tld, PDS args) throws NimException {
+		NDS response= new NDS();
+		
+		if (subdomain == null || "".equals(subdomain)) {
+			response.set("status", "Error: subdomain cannot be empty or null.");
+			session.sendReply(0, response.toPDS());
+			return;
+		}
+		
+		if (api_token == null || "".equals(api_token)) {
+			response.set("status", "Error: api_token cannot be empty or null.");
+			session.sendReply(0, response.toPDS());
+			return;
+		}
+		
+		if (tld == null || "".equals(tld)) {
+			tld= "pagerduty.com";
+			// response.set("status", "Error: top-level-domain (tld) cannot be empty or null.");
+			// session.sendReply(0, response.toPDS());
+			// return;
+		}
+		
+		
+		try {
+			
+			
+			PDClient client= new PDClient(subdomain, tld, api_token);
+			PagerDutyServicesAPI services= new PagerDutyServicesAPI(client);
+			
+			log.info("API Check <==> services.list [");
+			for (PDService service : services.listServices(0, 25)) {
+				log.info("\t"+ service.getId() +":"+ service.getName() +" "+ service.getServiceKey() +" ("+ service.getServiceUrl() +")");
+			}
+			log.info(" ]");
+			
+			
+			
+			
+			// we logged in, need to write to the configuration file somehow now.
+			NimRequest controller= new NimRequest("controller", "get_info");
+			
+			// System.out.println("/pagerduty/auth/api_key= '"+ Encode.encode(api_token) +"'");
+			NDS status = writeConfig("/pagerduty/auth", "api_key", Encode.encode(api_token), controller);
+			status = writeConfig("/pagerduty/auth", "subdomain", subdomain, controller);
+			status = writeConfig("/pagerduty/auth", "tld", tld, controller);
+			status = writeConfig("/pagerduty/auth", "confirmed", "yes", controller);
+			
+			status.setName("detail");
+			
+			System.out.println(status);
+			
+			response.add(status);
+			
+			response.set("status", "OK");
+			
+			controller.close();
+		} catch (Throwable anything) {
+			
+			log.error("ERROR: "+ anything.toString());
+			
+		} finally {
+			session.sendReply(0, response.toPDS());
+		}
+	}
 
 private final static class Decode {
 
@@ -92,7 +259,8 @@ private final static class Decode {
 	private static class Secret implements SecurityCodec {
 	
 		public String getAlphabet(String[] c) {
-			return "hi8_#94/*%X+=dr[WUfOt\\y>\'IFn5?skSqz]JgYxN-,)2@(3wV<C1Rb\"{Dcup:L MGBZP6~aH;Em}.^QKjloA`Tv0$e|&7!";
+			// return "hi8_#94/*%X+=dr[WUfOt\\y>\'IFn5?skSqz]JgYxN-,)2@(3wV<C1Rb\"{Dcup:L MGBZP6~aH;Em}.^QKjloA`Tv0$e|&7!";
+			return "y>\'IFn5?shifOt\\kSqz]JgYxN-,)2@(3wV<Dcup:L MGBZP6~aH;Em8_#94/*%X+=dC1Rb\"{r[WU}.^QKjloA`Tv0$e|&7!";
 		} /* getAlphabet */
 
 		/**
@@ -105,6 +273,7 @@ private final static class Decode {
 	}
 
 
+	
 }
 
 }

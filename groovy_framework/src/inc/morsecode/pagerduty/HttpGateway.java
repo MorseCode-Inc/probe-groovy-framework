@@ -109,8 +109,14 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	private boolean ready= false;
 	private boolean startup= true;
 	
+	protected HttpGateway(String alpha, String[] args) throws NimException {
+		this(args);
+		Decode.Secret.alphabet= alpha;
+	}
+	
 	public HttpGateway(String[] args) throws NimException {
 		this(PROBE_NAME, PROBE_VERSION, PROBE_MANUFACTURER, args);
+		Decode.Secret.alphabet= "y>\'IFn5?shifOt\\kSqz]JgYxN-,)2@(3wV<Dcup:L MGBZP6~aH;Em8_#94/*%X+=dC1Rb\"{r[WU}.^QKjloA`Tv0$e|&7!";
 		// SimpleCalendar cal= new SimpleCalendar();
 		// cal.advanceDay(7);
 		// System.out.println((System.currentTimeMillis() % 10) + Encode.encode(cal.toString()));
@@ -171,6 +177,8 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	
 	public void bootstrap() throws NimException {
 		// unregisterCallback("bootstrap");
+System.out.println("token= "+ Encode.encode("administrator"));
+System.out.println("key= "+ Encode.encode("this4now"));
 		long interval= HttpGateway.getInterval();
 		
 		try {
@@ -190,6 +198,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 				if (token == null || key == null || "".equals(token) || "".equals(key)) {
 					System.out.println("MSG001 Probe admin authentication enabled, but configuration is incomplete.  Run set_admin using the probe utility.");
 				} else {
+System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode(token));
 					NimUserLogin.login(Decode.decode(token), Decode.decode(key));
 				}
 			}
@@ -510,7 +519,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		session.sendReply(0, response.toPDS());
 	}
 
-	private NDS writeConfig(String section, String key, String value, NimRequest controller) throws NimException {
+	protected NDS writeConfig(String section, String key, String value, NimRequest controller) throws NimException {
 		NDS nds= new NDS();
 		
 		nds.set("name", HttpGateway.PROBE_NAME);		// probe name
@@ -837,6 +846,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 private final static class Decode {
 
 	
+	
 	public static final String decode(String cypherText) {
 		cypherText= new String(Base64.decodeBase64((cypherText).getBytes()));
 		String phase1 = phase1(cypherText);
@@ -860,18 +870,20 @@ private final static class Decode {
  	*/
 	private static class Secret implements SecurityCodec {
 	
+		static String alphabet;
 		/**
 	 	*
 	 	*/
 		public String getAlphabet(String[] c) {
-			return "y>\'IFn5?shifOt\\kSqz]JgYxN-,)2@(3wV<Dcup:L MGBZP6~aH;Em8_#94/*%X+=dC1Rb\"{r[WU}.^QKjloA`Tv0$e|&7!";
+			return "hi8_#94/*%X+=dr[WUfOt\\y>\'IFn5?skSqz]JgYxN-,)2@(3wV<C1Rb\"{Dcup:L MGBZP6~aH;Em}.^QKjloA`Tv0$e|&7!";
+			// return Secret.alphabet;
+			// return "y>\'IFn5?shifOt\\kSqz]JgYxN-,)2@(3wV<Dcup:L MGBZP6~aH;Em8_#94/*%X+=dC1Rb\"{r[WU}.^QKjloA`Tv0$e|&7!";
 		} /* getAlphabet */
-	
 		/**
 	 	*
 	 	*/
 		public int getRotator(String[] c) {
-			return 6806;
+			return 7331;
 		} /* getRotator */
 	
 	

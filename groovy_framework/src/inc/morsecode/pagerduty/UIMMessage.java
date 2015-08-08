@@ -2,12 +2,15 @@ package inc.morsecode.pagerduty;
 
 import inc.morsecode.NDS;
 
-public interface UIMMessage {
+public class UIMMessage extends NDS {
 
+	public UIMMessage(NDS nds) {
+		super(nds);
+	}
 	
-	public String getSubject();
+	public String getSubject() { return get("subject"); }
 	
-	public NDS getBody();
+	public NDS getBody() { return seek("udata"); }
 	
 	
 }

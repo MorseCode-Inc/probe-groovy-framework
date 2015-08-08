@@ -53,6 +53,7 @@ public class ProbeLicense extends NDS {
 	*/
 	
 	
+	/*
 	public static void main(String[] args) throws NimException {
 		
 		SimpleCalendar expires= new SimpleCalendar();
@@ -72,6 +73,7 @@ public class ProbeLicense extends NDS {
 		}
 		
 	}
+	*/
 
 
 }

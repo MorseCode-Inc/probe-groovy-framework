@@ -1,57 +1,53 @@
 package inc.morsecode.pagerduty;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 
 import inc.morsecode.NDS;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.restlet.Client;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.ClientInfo;
-import org.restlet.data.Form;
-import org.restlet.data.Header;
-import org.restlet.data.MediaType;
-import org.restlet.data.Method;
-import org.restlet.data.Protocol;
-import org.restlet.engine.Engine;
-import org.restlet.engine.header.HeaderUtils;
-import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ClientResource;
-import org.restlet.util.Series;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
 
-import com.sun.xml.internal.ws.message.source.ProtocolSourceMessage;
+import util.json.JsonArray;
+import util.json.JsonObject;
+import util.json.ex.MalformedJsonException;
+import util.kits.JsonParser;
+
 
 public class PDClient {
 
 	private NDS data= new NDS("pagerduty_client");
 	private NDS services;
-	private Client restlet= new Client(Protocol.HTTPS);
+	private HttpClient restlet;
 	
 	public PDClient(String subdomain, String apiKey) {
 		this(subdomain, "pagerduty.com", apiKey);
 	}
+	
 	public PDClient(String subdomain, String domain, String apiKey) {
 		this.services= data.seek("services", true);
 		data.set("subdomain", subdomain);
 		data.set("domain", domain);
 		data.set("auth/api_key", apiKey);
 		
-		
-		
-		List<Protocol> protocols= new ArrayList<Protocol>();
-		protocols.add(Protocol.HTTPS);
-		protocols.add(Protocol.HTTP);
-		restlet= new Client(protocols);
-		
+		this.restlet= HttpClients.createDefault();
 		
 	}
 	
@@ -68,11 +64,11 @@ public class PDClient {
 	}
 	
 	public String getBaseUrl(String protocol, String apiVer) {
-		return (protocol +"://"+ getDomain() +"/api/"+ apiVer);
+		return (protocol +"://"+ getDomain()); // +"/api/"+ apiVer);
 	}
 	
 	public String getApiToken() {
-		return data.get("api_token", (String)null);
+		return data.get("auth/api_key", (String)null);
 	}
 	
 	public void addService(String name, String token) {
@@ -85,159 +81,228 @@ public class PDClient {
 		return services.get(name +"/token", (String) null);
 	}
 	
-
-    public Request put(String uri, JSONObject data) {
-    	return this.http(Method.PUT, uri, data);
+    public HttpGet get(String uri, NDS params) {
+    	return (HttpGet)this.http("get", uri, null, params);
+    }
+	
+    public HttpRequest buildPostRequest(String uri, JsonObject data, NDS params) {
+    	return this.http("post", uri, data, params);
     }
     
-    private Request http(Method method, String uri, JSONObject data) {
-    	Request request= new Request(method, getBaseUrl("http", "v1") + uri);
+    public HttpRequest delete(String uri, JsonObject data, NDS params) {
+    	return this.http("delete", uri, data, params);
+    }
+
+    public HttpRequest put(String uri, JsonObject data, NDS params) {
+    	return this.http("put", uri, data, params);
+    }
+    
+    public HttpRequest post(String uri, JsonObject data, NDS params) {
+    	return this.http("post", uri, data, params);
+    }
+    
+    
+    private HttpRequest http(String method, String uri, JsonObject data, NDS params) {
+    	HttpRequest request= null;
+    	if (uri == null) {
+    		throw new RuntimeException("URI cannot be null, missing required argument to http(method, uri, data, params).");
+    	}
     	
-    	// request.setResourceRef(getBaseUrl("http", "v1"));
+    	uri= uri.trim();
     	
-    	ChallengeScheme sc= ChallengeScheme.CUSTOM;
+    	if (!uri.toLowerCase().startsWith("http")) { 
+    		if (!uri.startsWith("/")) { uri= "/"+ uri; }
+    		uri= getBaseUrl("https", "v1") + uri;
+    	}
     	
-    	Engine.getInstance().getRegisteredAuthenticators().add(new PagerDutyAuthenticationHelper());
+    	if (params != null && params.size() > 0) {
+    		String delim= "?";
+    		for (String key : params.keys()) {
+    			try {
+					uri+= delim + URLEncoder.encode(key, "UTF-8") +"="+ URLEncoder.encode(params.get(key), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+    			delim="&";
+    		}
+    		
+    	}
+		HttpEntity entity= null;
     	
-    	ChallengeResponse cr= new ChallengeResponse(new PagerDutyAuthenticationHelper().getChallengeScheme(), "Token", "token="+ getApiToken());
+    	if ("get".equalsIgnoreCase(method)) {
+    		request= new HttpGet(uri);
+    		HttpGet getUrl= (HttpGet)request;
+    		
+    		// System.err.println("uri: "+ uri);
+    		// System.err.println("URL: "+ ((HttpUriRequest) getUrl).getURI());
+    		
+    	} else if ("delete".equalsIgnoreCase(method)) {
+    		request= new HttpDelete(uri);
     	
-    	request.setChallengeResponse(cr);
-    	Series<Header> headers= new Series<Header>(Header.class);
-    	headers.add(new Header("Authorization", "Token token="+ getApiToken()));
-    	HeaderUtils.addRequestHeaders(request, headers);
+    	} else {
+			entity= entity(data);
+			
+			if ("put".equalsIgnoreCase(method)) {
+			
+				request= new HttpPut(uri);
+				if (data != null) {
+					((HttpPut)request).setEntity(entity);
+					request.setHeader("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
+				}
+			
+			} else if ("post".equalsIgnoreCase(method)) {
+				request= new HttpPost(uri);
+				if (data != null) {
+					((HttpPost)request).setEntity(entity);
+					request.setHeader("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
+				}
+			} else {
+				throw new RuntimeException("Unsupported HTTP Method: "+ method +" "+ uri);
+			}
+		}
     	
-    	
-    	
-    	// setHttpHeader(request, "Authorization", "Token token="+ getApiToken());
-    	
-    	
-    	// request.getResourceRef().set
+		request.setHeader("Authorization", "Token token="+ getApiToken());
+		
+		
+		boolean debugging= false;
+		if (debugging) {
+			for (Header header : request.getAllHeaders()) {
+				System.out.println(header);
+			}
+			
+			if (entity != null) {
+				System.out.println(data);
+			}
+		}
     	
     	return request;
     }
+
+	public StringEntity entity(JsonObject data) {
+		if (data == null) { return null; }
+		return new StringEntity(data.toString(), ContentType.APPLICATION_JSON);
+	}
     
-    public org.restlet.Response execute(Request request, JSONObject json) {
+    private HttpResponse execute(HttpUriRequest request) {
     	try {
-    		System.out.println("__");
-    		System.out.println(request);
-    		System.out.println("__");
-    		request.setEntity(json.toString(), MediaType.APPLICATION_JSON);
-    		return restlet.handle(request);
+    		// System.out.println(request);
+
+            // Create a custom response handler
+    		/*
+            ResponseHandler<HttpResponse> responseHandler = new ResponseHandler<HttpResponse>() {
+
+                @Override
+                public HttpResponse handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
+                    int status = response.getStatusLine().getStatusCode();
+                    System.out.println(" RESPONSE > ");
+                    for (Header header : response.getAllHeaders()) {
+                    	// System.out.println(header);
+                    }
+                    System.out.println(response.getEntity());
+                    System.out.println();
+                    if (status >= 200 && status < 300) {
+                        HttpEntity entity = response.getEntity();
+                    } else {
+                        throw new ClientProtocolException("Unexpected response status: " + status);
+                    }
+                    
+                    return response;
+                }
+
+            };
+            */
+            
+            
+            try {
+            	HttpResponse response= restlet.execute(request); // , responseHandler);
+            	return response;
+            } catch (ClientProtocolException x) {
+            	System.out.println(x.getMessage() +" "+ x.getCause());
+            }
+    		
     	} catch (IllegalArgumentException iax) {
     		System.err.println("ILLEGAL ARGUMENT:\n"+ iax);
     	} catch (NullPointerException npx) {
     		System.err.println("NULL:\n"+ npx);
     	} catch (Throwable error) {
     		System.err.println("ERROR:\n"+ error);
+    		error.printStackTrace();
     		
     	} finally {
     		
-    	System.out.println("HERE");
     	System.out.flush();
     	System.err.flush();
     	}
     	
     	return null;
     }
-	
-	public static void main(String[] args) throws Exception {
+    
+	public JsonObject call(String httpMethod, String uri, JsonObject data, NDS params) throws IOException, MalformedJsonException {
 		
-		PDClient client= new PDClient("morsecode-incorporated", "pagerduty.com", "PnKQyzNjQEjsRfodeTwa");
+		HttpRequest request= null;
 		
-		JSONObject json= new JSONObject();
-		JSONObject alarmData= new JSONObject();
-		JSONArray contexts= new JSONArray();
-		
-		alarmData.put("nimid", "11233333ABAB");
-		alarmData.put("robot", "robot-name");
-		alarmData.put("source", "alarm-source");
-		alarmData.put("subsystem", "2.11.1");
-		alarmData.put("origin", "origin");
-		alarmData.put("assigned_to", "assigned_to");
-		alarmData.put("assigned_by", "assigned_by");
-		alarmData.put("assigned_ts", "2015-01-01 14:44:00");
-		alarmData.put("nimts", "2015-01-01 14:44:00");
-		alarmData.put("arrival_ts", "2015-01-01 14:44:00");
-		alarmData.put("last_received_ts", "2015-01-01 14:44:00");
-		alarmData.put("origin_ts", "2015-01-01 14:44:00");
-		
-		json.put("service_key", "bb730aa07f74467c8254e827a0c921c8");
-		json.put("event_type", "trigger");
-		json.put("description", "ALert Message Description");
-		// json.put("incident_key", null);
-		json.put("client", "pd_uim_gtw");
-		//json.put("client_url", null);
-		json.put("details", alarmData);
-		json.put("contexts", contexts);
-		
-		
-		Request request= client.put("/incidents", json);
-		
-		Response resp= client.execute(request, json);
-		
-		if (resp != null) {
-		
-			resp.getEntity().write(System.out);
+		if ("put".equalsIgnoreCase(httpMethod)) {
+			request= buildPostRequest(uri, data, params);
+		} else if ("get".equalsIgnoreCase(httpMethod)) {
+			request= get(uri, params);
+		} else if ("delete".equalsIgnoreCase(httpMethod)) {
+			request= delete(uri, data, params);
+		} else if ("post".equalsIgnoreCase(httpMethod)) {
+			request= post(uri, data, params);
 		} else {
-			// response was null
-			
+			// unsupported method
+			throw new RuntimeException("Unsupported HTTP Method: "+ httpMethod +".  Denying access to "+ uri +" {"+ data.toString().replaceAll("\r\n\t",  " ") +"}");
 		}
 		
 		
+		// send it
+		HttpResponse response= execute((HttpUriRequest)request);
+		
+		if (response != null) {
+			
+			String message= response.getStatusLine().getReasonPhrase();
+			int code= response.getStatusLine().getStatusCode();
+			
+			// System.out.println(code + " "+ message);
+			
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				ByteArrayOutputStream baos= new ByteArrayOutputStream();
+				entity.writeTo(baos);
+				
+				baos.close();
+				String string = baos.toString();
+				JsonObject json= JsonParser.parse(string);
+				
+				return json;
+			}
+		}
+		
+		return null;
 	}
 	
-	public static void main1(String[] args) throws Exception {
-		
-		
-		// Create the client resource  
-		// ClientResource resource = new ClientResource("http://support.morsecode-inc.com:3081/nimbus/env");  
-		ClientResource resource = new ClientResource("http://support.morsecode-inc.com:3081/nimbus/alarm/create");  
+	
 
-		String domain= "morsecode-incorporated.pagerduty.com";
-		// domain= "events.pagerduty.com";
-		String protocol= "https";
-		String pdUrl= protocol +"://"+ domain +"/api/v1/";
-		resource= new ClientResource(pdUrl + "incidents");
-		// resource= new ClientResource(pdUrl + "generic/2010-04-15/create_event.json");
-		
-		resource.setMethod(Method.PUT);
 
-		JSONObject json= new JSONObject();
-		JSONObject alarmData= new JSONObject();
-		JSONArray contexts= new JSONArray();
+
+
+	public static JsonObject nimalarm() {
+		JsonObject alarmData= new JsonObject();
 		
-		alarmData.put("nimid", "11233333ABAB");
-		alarmData.put("robot", "robot-name");
-		alarmData.put("source", "alarm-source");
-		alarmData.put("subsystem", "2.11.1");
-		alarmData.put("origin", "origin");
-		alarmData.put("assigned_to", "assigned_to");
-		alarmData.put("assigned_by", "assigned_by");
-		alarmData.put("assigned_ts", "2015-01-01 14:44:00");
-		alarmData.put("nimts", "2015-01-01 14:44:00");
-		alarmData.put("arrival_ts", "2015-01-01 14:44:00");
-		alarmData.put("last_received_ts", "2015-01-01 14:44:00");
-		alarmData.put("origin_ts", "2015-01-01 14:44:00");
-		
-		json.put("service_key", "bb730aa07f74467c8254e827a0c921c8");
-		json.put("event_type", "trigger");
-		json.put("description", "ALert Message Description");
-		// json.put("incident_key", null);
-		json.put("client", "pd_uim_gtw");
-		//json.put("client_url", null);
-		json.put("details", alarmData);
-		json.put("contexts", contexts);
-		
-		String apiToken= "PnKQyzNjQEjsRfodeTwa";
-		
-		JsonRepresentation r=new JsonRepresentation(json);
-		
-		r.write(System.out);
-		System.out.println();
-		System.out.println(MediaType.APPLICATION_JSON);
-		
-		
-		resource.put(json, MediaType.APPLICATION_JSON).write(System.out);
-		
+		alarmData.set("nimid", "11233333ABAB");
+		alarmData.set("robot", "robot-name");
+		alarmData.set("source", "alarm-source");
+		alarmData.set("subsystem", "2.11.1");
+		alarmData.set("origin", "origin");
+		alarmData.set("assigned_to", "assigned_to");
+		alarmData.set("assigned_by", "assigned_by");
+		alarmData.set("assigned_ts", "2015-01-01 14:44:00");
+		alarmData.set("nimts", "2015-01-01 14:44:00");
+		alarmData.set("arrival_ts", "2015-01-01 14:44:00");
+		alarmData.set("last_received_ts", "2015-01-01 14:44:00");
+		alarmData.set("origin_ts", "2015-01-01 14:44:00");
+		return alarmData;
 	}
+
+	
 }

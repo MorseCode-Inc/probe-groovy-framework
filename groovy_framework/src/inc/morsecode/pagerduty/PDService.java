@@ -18,30 +18,39 @@ public class PDService extends NDS {
 	private NDS details= new NDS("details");
 	
 	 public PDService(String name, String key) {
-		 this(name, key, EventType.TRIGGER);
+		 set("name", name);
+		 set("service_key", key);
 	 }
 	 
 
+	public PDService(String name, JsonObject json) {
+		super(name, json);
+	}
+
+	public String getId() { return get("id"); }
+	public String getServiceKey() { return get("service_key"); }
+	public String getServiceUrl() { return get("service_url"); }
+	public String getName() { return get("name"); }
+	public String getCreatedAt() { return get("created_at"); }
+	public String getEmailFilterMode() { return get("email_filter_mode"); }
+	public String getPDType() { return get("type"); }
+	public int getAcknowledgement_timeout() { return get("acknowledgement_timeout", 1800); }
+	public int getAutoResolveTimeout() { return get("auto_resolve_timeout", 14400); }
+	public String getStatus() { return get("status"); }
+	public String getEventType() { return get("event_type"); }
+	public String getDescription() { return get("description"); }
+	public String getIncidentKey() { return get("incident_key"); }
+	public String getClient() { return get("client"); }
+	public String getClientUrl() { return get("client_url"); }
 	
-	public String getEventType() {
-		return get("event_type");
+	public NDS getIncidentCounts() {
+		return seek("incident_counts", true);
 	}
 	
-	public String getDescription() {
-		return get("description");
-	}
-	
-	public String getIncidentKey() {
-		return get("incident_key");
-	}
-	
-	public String getClient() {
-		return get("client");
-	}
-	
-	public String getClientUrl() {
-		return get("client_url");
-	}
+	public int getCountTotalIncidents() { return getIncidentCounts().get("total", 0); }
+	public int getCountResolvedIncidents() { return getIncidentCounts().get("resolved", 0); }
+	public int getCountAcknowledgedIncidents() { return getIncidentCounts().get("acknowledged", 0); }
+	public int getCounttriggeredIncidents() { return getIncidentCounts().get("triggered", 0); }
 	
 	public JsonObject getDetails() {
 		JsonObject details= new JsonObject();
@@ -61,7 +70,7 @@ public class PDService extends NDS {
 	public JsonArray getContexts() {
 		JsonArray contexts= new JsonArray();
 		
-		for (NDS nds : seek("contexts")) {
+		for (NDS nds : seek("contexts", true)) {
 			contexts.add(nds.toJson());
 		}
 		
