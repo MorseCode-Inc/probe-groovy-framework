@@ -1,6 +1,7 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.core;
 
 import inc.morsecode.NDS;
+import inc.morsecode.probes.http_gateway.CGI;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -187,8 +188,8 @@ public abstract class Endpoint extends HttpServlet {
 		
 	}
 
-	private void simple(HttpServletRequest req, HttpServletResponse resp,
-			CGI cgi) throws ServletException, IOException {
+	/*
+	private void simple(HttpServletRequest req, HttpServletResponse resp, CGI cgi) throws ServletException, IOException {
 		if ("GET".equalsIgnoreCase(req.getMethod())) {
 			index(cgi);
 		} else if ("POST".equalsIgnoreCase(req.getMethod())) {
@@ -200,6 +201,7 @@ public abstract class Endpoint extends HttpServlet {
 			super.service(req, resp);
 		}
 	}
+	*/
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {

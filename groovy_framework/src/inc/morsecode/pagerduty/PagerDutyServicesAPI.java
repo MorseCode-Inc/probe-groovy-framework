@@ -1,15 +1,11 @@
 package inc.morsecode.pagerduty;
 
 import inc.morsecode.NDS;
+import inc.morsecode.core.ListResult;
+import inc.morsecode.pagerduty.api.PDClient;
+import inc.morsecode.pagerduty.api.PDService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
 
 import util.json.JsonArray;
 import util.json.JsonObject;

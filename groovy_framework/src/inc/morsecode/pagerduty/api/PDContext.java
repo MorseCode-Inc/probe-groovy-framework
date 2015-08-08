@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.pagerduty.api;
 
 /**
  * 
@@ -10,6 +10,7 @@ package inc.morsecode.pagerduty;
 
 import util.json.JsonObject;
 import inc.morsecode.NDS;
+import inc.morsecode.pagerduty.PDConstants;
 import inc.morsecode.pagerduty.PDConstants.ContextType;
 
 public class PDContext extends NDS {

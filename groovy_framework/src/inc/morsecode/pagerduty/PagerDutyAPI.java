@@ -1,5 +1,9 @@
 package inc.morsecode.pagerduty;
 
+import inc.morsecode.pagerduty.api.PDClient;
+import inc.morsecode.pagerduty.api.PDService;
+import inc.morsecode.pagerduty.api.PagerDutyIncidentsAPI;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

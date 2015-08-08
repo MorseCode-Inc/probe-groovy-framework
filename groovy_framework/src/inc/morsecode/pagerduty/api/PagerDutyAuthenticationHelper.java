@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.pagerduty.api;
 
 import java.io.IOException;
 

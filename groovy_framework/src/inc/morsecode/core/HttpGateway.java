@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +9,7 @@ import java.text.ParseException;
 import inc.morsecode.NDS;
 import inc.morsecode.NDSValue;
 import inc.morsecode.NimLogPrintWriter;
+import inc.morsecode.pagerduty.ProbeLicense;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,43 +46,7 @@ import com.nimsoft.nimbus.PDS;
 import com.nimsoft.nimbus.ci.ConfigurationItem;
 
 
-public abstract class HttpGateway extends NimProbe implements org.apache.catalina.LifecycleListener {
-	
-	public static final String NIM_ROBOT_NAME= "robotname";
-	public static final String NIM_OS_DESCRIPTION= "os_description"; // Linux 2.6.32-279.el6.x86_64 #1 SMP Fri Jun 22 12:19:21 UTC 2012 x86_64
-	public static final String NIM_HUB_NAME= "hubname"; // redfish
-	public static final String NIM_TIMEZONE_NAME= "timezone_name"; // MST
-	public static final String NIM_WORKDIR= "workdir"; // /opt/nimsoft
-	public static final String NIM_ACCESS_0= "access_0"; // 0
-	public static final String NIM_ACCESS_1= "access_1"; // 1
-	public static final String NIM_ACCESS_2= "access_2"; // 2
-	public static final String NIM_ACCESS_3= "access_3"; // 3
-	public static final String NIM_ACCESS_4= "access_4"; // 4
-	public static final String NIM_REQUESTS= "requests"; // 5806
-	public static final String NIM_HUB_DNS_NAME= "hub_dns_name"; // redfish.home
-	public static final String NIM_LOG_FILE= "log_file"; // controller.log
-	public static final String NIM_DOMAIN= "domain"; // UIM
-	public static final String NIM_LICENSE= "license"; // 1
-	public static final String NIM_ROBOT_MODE= "robot_mode"; // 0
-	public static final String NIM_SPOOLPORT= "spoolport"; // 48001
-	public static final String NIM_HUB_ROBOT_NAME= "hubrobotname"; // _hub
-	public static final String NIM_ORIGIN= "origin"; // redfish
-	public static final String NIM_UPTIME= "uptime"; // 179706
-	public static final String NIM_CURRENT_TIME= "current_time"; // 1432501998
-	public static final String NIM_ROBOT_IP= "robotip"; // 10.14.47.133
-	public static final String NIM_OS_USER1= "os_user1"; // 
-	public static final String NIM_OS_USER2= "os_user2"; // 
-	public static final String NIM_LAST_INST_CHANGE= "last_inst_change"; // 1427955964
-	public static final String NIM_OS_MAJOR= "os_major"; // UNIX
-	public static final String NIM_OS_VERSION= "os_version"; // 2.6
-	public static final String NIM_TIMEZONE_DIFF= "timezone_diff"; // 25200
-	public static final String NIM_SOURCE= "source"; // centos-java-01
-	public static final String NIM_HUB_IP= "hubip"; // 10.14.47.129
-	public static final String NIM_ROBOT_DEVICE_ID= "robot_device_id"; // DAEA3E72CD247129F42734954C9E4DCC5
-	public static final String NIM_NIM_STARTED= "started"; // 1432322292
-	public static final String NIM_LOG_LEVEL= "log_level"; // 3
-	public static final String NIM_OS_MINOR= "os_minor"; // Linux
-
+public abstract class HttpGateway extends NimProbe implements org.apache.catalina.LifecycleListener, CustomProbeInterface {
 	
 	public final static String PROBE_NAME= "pagerduty";
 	public final static String PROBE_VERSION= "1.01";
@@ -92,7 +57,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	
 	private static NDS persistentData;
 	private boolean flushCache;
-	private static HttpGateway instance;
+	private static CustomProbeInterface instance;
 	private File persistentCache;
 	
 	protected NimLog log;
@@ -143,6 +108,10 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	
 
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#refreshConfiguration()
+	 */
+	@Override
 	public void refreshConfiguration() throws NimException {
 		
 		config= NDS.create(NimConfig.getInstance());
@@ -175,6 +144,10 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#bootstrap()
+	 */
+	@Override
 	public void bootstrap() throws NimException {
 		// unregisterCallback("bootstrap");
 System.out.println("token= "+ Encode.encode("administrator"));
@@ -227,6 +200,10 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 		// registerCallbackOnTimer(this, "execute", interval, true);
 	}
 
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#updateControllerInfo()
+	 */
+	@Override
 	public NDS updateControllerInfo() throws NimException {
 		this.controllerInfo= getControllerInformation();
 		return controllerInfo;
@@ -448,6 +425,10 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#shutdown()
+	 */
+	@Override
 	public void shutdown() {
 		
 		// need to signal tomcat that we are shutting down
@@ -562,12 +543,20 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#getSubsystemId()
+	 */
+	@Override
 	public String getSubsystemId() {
 		return config.get("setup/subsystem_id", config.get("setup/subsystem", SUBSYSTEM_ID));
 	}
 	
 	
 
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#getQoSDefinitions()
+	 */
+	@Override
 	public NDS getQoSDefinitions() {
 		return config.seek("QOS_DEFINITIONS", true);
 	}
@@ -580,10 +569,18 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 		return log;
 	}
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#getRobotName()
+	 */
+	@Override
 	public String getRobotName() {
 		return controllerInfo.get(NIM_ROBOT_NAME);
 	}
 
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#getSource()
+	 */
+	@Override
 	public String getSource() {
 		return controllerInfo.get(NIM_SOURCE, getRobotName());
 	}
@@ -597,7 +594,7 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
     	System.out.println("Lifecycle Event: "+ arg0);
     }
 
-	public static HttpGateway getInstance() {
+	public static CustomProbeInterface getInstance() {
 		return instance;
 	}
     
@@ -620,6 +617,10 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 	}
     
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#call(java.lang.String, java.lang.String, int, java.lang.String)
+	 */
+	@Override
 	public NDS call(String address, String command, int retries, String[] ... params) throws NimException {
 		while (retries-- >= 0) {
 			try {
@@ -834,6 +835,10 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 		return authorized;
 	}
 	
+	/* (non-Javadoc)
+	 * @see inc.morsecode.pagerduty.CustomProbeInterface#getMessage(java.lang.String)
+	 */
+	@Override
 	public NDS getMessage(String name) {
 		NDS config= HttpGateway.config;
 		NDS message= config.seek("messages/"+ name);

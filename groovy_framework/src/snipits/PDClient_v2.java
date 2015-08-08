@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty;
+package snipits;
 
 import inc.morsecode.NDS;
 

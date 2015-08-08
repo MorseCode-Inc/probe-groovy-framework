@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.core;
 
 import inc.morsecode.NDS;
 

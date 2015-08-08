@@ -1,6 +1,7 @@
-package inc.morsecode.pagerduty;
+package inc.morsecode.core;
 
 import inc.morsecode.NDS;
+import inc.morsecode.probes.http_gateway.CGI;
 
 import java.io.IOException;
 
