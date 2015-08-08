@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.restlet.Request;
-import org.restlet.Response;
 
 import util.json.JsonArray;
 import util.json.JsonObject;

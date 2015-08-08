@@ -10,9 +10,6 @@
 	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-core.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/ecj-4.4.jar"/>
 	<classpathentry kind="lib" path="build/lib/org.restlet.ext.apispark.jar"/>
-	<classpathentry kind="lib" path="build/lib/org.restlet.ext.json.jar"/>
-	<classpathentry kind="lib" path="build/lib/org.restlet.jar"/>
-	<classpathentry kind="lib" path="build/lib/org.json_2.0/org.json.jar"/>
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/commons-codec-1.9.jar"/>
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpclient-4.5.jar"/>
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpcore-4.4.1.jar"/>
@@ -20,5 +17,6 @@
 	<classpathentry kind="lib" path="build/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/lib.json.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-logging-juli.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,85 +1,112 @@
-Aug 03 07:18:11:432 [Thread-8927, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:14:443 [Thread-8928, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:14:443 [Thread-8928, pagerduty] Possible Causes:
-Aug 03 07:18:14:443 [Thread-8928, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:14:443 [Thread-8928, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:17:454 [Thread-8929, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:17:454 [Thread-8929, pagerduty] Possible Causes:
-Aug 03 07:18:17:454 [Thread-8929, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:17:454 [Thread-8929, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:20:465 [Thread-8930, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:20:465 [Thread-8930, pagerduty] Possible Causes:
-Aug 03 07:18:20:465 [Thread-8930, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:20:465 [Thread-8930, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:23:476 [Thread-8931, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:23:476 [Thread-8931, pagerduty] Possible Causes:
-Aug 03 07:18:23:476 [Thread-8931, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:23:476 [Thread-8931, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:26:489 [Thread-8932, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:26:489 [Thread-8932, pagerduty] Possible Causes:
-Aug 03 07:18:26:489 [Thread-8932, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:26:489 [Thread-8932, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:29:500 [Thread-8933, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:29:500 [Thread-8933, pagerduty] Possible Causes:
-Aug 03 07:18:29:500 [Thread-8933, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:29:500 [Thread-8933, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:32:511 [Thread-8934, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:32:511 [Thread-8934, pagerduty] Possible Causes:
-Aug 03 07:18:32:511 [Thread-8934, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:32:511 [Thread-8934, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:35:522 [Thread-8935, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:35:522 [Thread-8935, pagerduty] Possible Causes:
-Aug 03 07:18:35:522 [Thread-8935, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:35:522 [Thread-8935, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:38:533 [Thread-8936, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:38:543 [Thread-8936, pagerduty] Possible Causes:
-Aug 03 07:18:38:543 [Thread-8936, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:38:543 [Thread-8936, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:41:544 [Thread-8937, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:41:544 [Thread-8937, pagerduty] Possible Causes:
-Aug 03 07:18:41:544 [Thread-8937, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:41:544 [Thread-8937, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:44:555 [Thread-8938, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:44:555 [Thread-8938, pagerduty] Possible Causes:
-Aug 03 07:18:44:555 [Thread-8938, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:44:555 [Thread-8938, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:47:566 [Thread-8939, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:47:566 [Thread-8939, pagerduty] Possible Causes:
-Aug 03 07:18:47:566 [Thread-8939, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:47:566 [Thread-8939, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:50:577 [Thread-8940, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:50:577 [Thread-8940, pagerduty] Possible Causes:
-Aug 03 07:18:50:577 [Thread-8940, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:50:577 [Thread-8940, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:53:592 [Thread-8941, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:53:592 [Thread-8941, pagerduty] Possible Causes:
-Aug 03 07:18:53:592 [Thread-8941, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:53:592 [Thread-8941, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:56:603 [Thread-8942, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:56:603 [Thread-8942, pagerduty] Possible Causes:
-Aug 03 07:18:56:603 [Thread-8942, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:56:603 [Thread-8942, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:18:59:614 [Thread-8943, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:18:59:614 [Thread-8943, pagerduty] Possible Causes:
-Aug 03 07:18:59:614 [Thread-8943, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:18:59:614 [Thread-8943, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:02:625 [Thread-8944, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:02:635 [Thread-8944, pagerduty] Possible Causes:
-Aug 03 07:19:02:635 [Thread-8944, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:02:635 [Thread-8944, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:05:641 [Thread-8945, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:05:641 [Thread-8945, pagerduty] Possible Causes:
-Aug 03 07:19:05:641 [Thread-8945, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:05:641 [Thread-8945, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:08:652 [Thread-8946, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:08:652 [Thread-8946, pagerduty] Possible Causes:
-Aug 03 07:19:08:652 [Thread-8946, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:08:652 [Thread-8946, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:11:663 [Thread-8947, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:11:663 [Thread-8947, pagerduty] Possible Causes:
-Aug 03 07:19:11:663 [Thread-8947, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:11:663 [Thread-8947, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:14:677 [Thread-8948, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:14:677 [Thread-8948, pagerduty] Possible Causes:
-Aug 03 07:19:14:677 [Thread-8948, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:14:677 [Thread-8948, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:23:04:245 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:23:07:309 [Thread-0, pagerduty] token= PT5ncHhmLyJgOnEicENoZHVmb2BjNUYqQUtAcXxOeXI=
+Aug 08 14:23:07:333 [Thread-0, pagerduty] key= Z1JEO0l3Pm4nQkVCenBrZjY6QCJZLTc3ZXJyJw==
+Aug 08 14:23:07:335 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:23:07:335 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:23:10:366 [Thread-1, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:23:10:366 [Thread-1, pagerduty] Possible Causes:
+Aug 08 14:23:10:366 [Thread-1, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:23:10:366 [Thread-1, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:23:11:386 [Thread-0, pagerduty] License Check Failed: Unable to open a client session for 127.0.0.1:48001
+Aug 08 14:23:28:207 [main, pagerduty] Log Level = 4
+Aug 08 14:23:28:217 [main, pagerduty] Loading...
+Aug 08 14:23:28:237 [main, pagerduty] ****************[ Starting ]****************
+Aug 08 14:23:28:237 [main, pagerduty] 1.01
+Aug 08 14:23:28:237 [main, pagerduty] MorseCode Incorporated
+Aug 08 14:23:28:247 [main, pagerduty] port=48005
+Aug 08 14:23:28:277 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:23:31:350 [Thread-0, pagerduty] token= QTQ0cnFsL29dNzdTMz9ZeEpuTFhXQzwwUFFFNVJMOUQ=
+Aug 08 14:23:31:392 [Thread-0, pagerduty] key= U3osOkZEN2p3TEksVVB8IzQ+TGpRemxaejA7Jg==
+Aug 08 14:23:31:394 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:23:31:404 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:23:35:035 [Thread-1, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:23:35:035 [Thread-1, pagerduty] Possible Causes:
+Aug 08 14:23:35:035 [Thread-1, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:23:35:035 [Thread-1, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:23:35:435 [Thread-0, pagerduty] License Check Failed: Unable to open a client session for 127.0.0.1:48001
+Aug 08 14:34:13:210 [main, pagerduty] Log Level = 4
+Aug 08 14:34:13:210 [main, pagerduty] Loading...
+Aug 08 14:34:13:230 [main, pagerduty] ****************[ Starting ]****************
+Aug 08 14:34:13:230 [main, pagerduty] 1.01
+Aug 08 14:34:13:230 [main, pagerduty] MorseCode Incorporated
+Aug 08 14:34:13:240 [main, pagerduty] port=48005
+Aug 08 14:34:13:280 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:34:16:312 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:34:16:312 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:34:16:402 [Thread-0, pagerduty] org/apache/juli/logging/LogFactory
+Aug 08 14:34:16:402 [Thread-0, pagerduty] java.lang.NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at org.apache.catalina.util.LifecycleBase.<clinit>(LifecycleBase.java:37)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at org.apache.catalina.startup.Tomcat.getHost(Tomcat.java:442)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootTomcat(HttpGateway.java:297)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootstrap(HttpGateway.java:184)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.execute(HttpGateway.java:218)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.lang.reflect.Method.invoke(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.activateOnTimer(NimProbeBase.java:416)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.access$000(NimProbeBase.java:8)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase$OnTimerExecuteThread.run(NimProbeBase.java:465)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] Caused by: java.lang.ClassNotFoundException: org.apache.juli.logging.LogFactory
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.security.AccessController.doPrivileged(Native Method)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.net.URLClassLoader.findClass(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:16:402 [Thread-0, pagerduty] 	... 12 more
+Aug 08 14:34:16:402 [Thread-0, pagerduty] NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:34:28:783 [main, pagerduty] Log Level = 4
+Aug 08 14:34:28:793 [main, pagerduty] Loading...
+Aug 08 14:34:28:813 [main, pagerduty] ****************[ Starting ]****************
+Aug 08 14:34:28:813 [main, pagerduty] 1.01
+Aug 08 14:34:28:813 [main, pagerduty] MorseCode Incorporated
+Aug 08 14:34:28:823 [main, pagerduty] port=48005
+Aug 08 14:34:28:873 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:34:31:905 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:34:31:905 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:34:31:925 [Thread-0, pagerduty] org/apache/juli/logging/LogFactory
+Aug 08 14:34:31:925 [Thread-0, pagerduty] java.lang.NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:34:31:925 [Thread-0, pagerduty] 	at org.apache.catalina.util.LifecycleBase.<clinit>(LifecycleBase.java:37)
+Aug 08 14:34:31:925 [Thread-0, pagerduty] 	at org.apache.catalina.startup.Tomcat.getHost(Tomcat.java:442)
+Aug 08 14:34:31:925 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootTomcat(HttpGateway.java:297)
+Aug 08 14:34:31:925 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootstrap(HttpGateway.java:184)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.execute(HttpGateway.java:218)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.lang.reflect.Method.invoke(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.activateOnTimer(NimProbeBase.java:416)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.access$000(NimProbeBase.java:8)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase$OnTimerExecuteThread.run(NimProbeBase.java:465)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] Caused by: java.lang.ClassNotFoundException: org.apache.juli.logging.LogFactory
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.security.AccessController.doPrivileged(Native Method)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.net.URLClassLoader.findClass(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:34:31:935 [Thread-0, pagerduty] 	... 12 more
+Aug 08 14:34:31:935 [Thread-0, pagerduty] NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:36:00:254 [main, pagerduty] Log Level = 4
+Aug 08 14:36:00:264 [main, pagerduty] Loading...
+Aug 08 14:36:00:294 [main, pagerduty] ****************[ Starting ]****************
+Aug 08 14:36:00:294 [main, pagerduty] 1.01
+Aug 08 14:36:00:294 [main, pagerduty] MorseCode Incorporated
+Aug 08 14:36:00:304 [main, pagerduty] port=48005
+Aug 08 14:36:00:334 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:36:03:366 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:36:03:366 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:36:03:416 [Thread-0, pagerduty] org/apache/juli/logging/LogFactory
+Aug 08 14:36:03:416 [Thread-0, pagerduty] java.lang.NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at org.apache.catalina.util.LifecycleBase.<clinit>(LifecycleBase.java:37)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at org.apache.catalina.startup.Tomcat.getHost(Tomcat.java:442)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootTomcat(HttpGateway.java:297)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.bootstrap(HttpGateway.java:184)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at inc.morsecode.core.HttpGateway.execute(HttpGateway.java:218)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at java.lang.reflect.Method.invoke(Unknown Source)

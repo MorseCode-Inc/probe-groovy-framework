@@ -150,8 +150,6 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	@Override
 	public void bootstrap() throws NimException {
 		// unregisterCallback("bootstrap");
-System.out.println("token= "+ Encode.encode("administrator"));
-System.out.println("key= "+ Encode.encode("this4now"));
 		long interval= HttpGateway.getInterval();
 		
 		try {
@@ -171,7 +169,6 @@ System.out.println("key= "+ Encode.encode("this4now"));
 				if (token == null || key == null || "".equals(token) || "".equals(key)) {
 					System.out.println("MSG001 Probe admin authentication enabled, but configuration is incomplete.  Run set_admin using the probe utility.");
 				} else {
-System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode(token));
 					NimUserLogin.login(Decode.decode(token), Decode.decode(key));
 				}
 			}
@@ -697,11 +694,16 @@ System.out.println("trying to login as "+ Decode.decode(key) +" "+ Decode.decode
 			
 			String ci_path= "10.3";
 			
-			ConfigurationItem ci= new ConfigurationItem(ci_path, getSource());
-			int metricId= 2;
-			NimAlarm alarm= new NimAlarm(severity, message, getSubsystemId(), "license/epiration", getSource(), ci, ci_path +":"+ metricId);
-			alarm.send();
-			alarm.close();
+			try {
+				ConfigurationItem ci= new ConfigurationItem(ci_path, getSource());
+				int metricId= 2;
+				NimAlarm alarm= new NimAlarm(severity, message, getSubsystemId(), "license/epiration", getSource(), ci, ci_path +":"+ metricId);
+				alarm.send();
+				alarm.close();
+			} catch (NimException nx) {
+				log.error("Failure to send license expiration alarm: "+ nx.getMessage());
+				log.error("\tMake sure the robot is running and healthy on this host.");
+			}
 			
 		} catch (ParseException e) {
 			System.out.println("License key is missing, damaged, or corrupt. Contact sales@morsecode-inc.com.");

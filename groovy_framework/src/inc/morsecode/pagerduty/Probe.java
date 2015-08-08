@@ -7,6 +7,7 @@ import inc.morsecode.core.HttpGateway;
 import inc.morsecode.core.MessageHandler;
 import inc.morsecode.core.QueueSubscription;
 import inc.morsecode.core.UIMMessage;
+import inc.morsecode.nas.UIMAlarmNew;
 import inc.morsecode.pagerduty.api.PDClient;
 import inc.morsecode.pagerduty.api.PDService;
 
@@ -159,18 +160,23 @@ public class Probe extends HttpGateway implements MessageHandler {
 	@Override
 	public boolean handle(UIMMessage message) {
 		
+		AlarmDatabase alarmManager= new AlarmDatabase();
+		
 		if ("alarm".equals(message.getSubject())) {
 		} else if ("alarm_new".equals(message.getSubject())) {
+			alarmManager.handle(new UIMAlarmNew(message));
 		} else if ("alarm_update".equals(message.getSubject())) {
 		} else if ("alarm_assign".equals(message.getSubject())) {
 		} else if ("alarm_close".equals(message.getSubject())) {
 			
 		}
-		System.out.println(message.getSubject());
 		
 		
 		return true;
 	}
+	
+	
+	
 	
 	
 

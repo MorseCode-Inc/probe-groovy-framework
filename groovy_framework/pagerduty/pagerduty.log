@@ -1,60 +1,50 @@
-Aug 03 07:19:17:688 [Thread-8949, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:17:698 [Thread-8949, pagerduty] Possible Causes:
-Aug 03 07:19:17:698 [Thread-8949, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:17:698 [Thread-8949, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:20:699 [Thread-8950, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:20:699 [Thread-8950, pagerduty] Possible Causes:
-Aug 03 07:19:20:699 [Thread-8950, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:20:699 [Thread-8950, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:23:710 [Thread-8951, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:23:710 [Thread-8951, pagerduty] Possible Causes:
-Aug 03 07:19:23:710 [Thread-8951, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:23:710 [Thread-8951, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:26:721 [Thread-8952, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:26:721 [Thread-8952, pagerduty] Possible Causes:
-Aug 03 07:19:26:721 [Thread-8952, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:26:721 [Thread-8952, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:29:732 [Thread-8953, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:29:732 [Thread-8953, pagerduty] Possible Causes:
-Aug 03 07:19:29:732 [Thread-8953, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:29:732 [Thread-8953, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:32:743 [Thread-8954, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:32:743 [Thread-8954, pagerduty] Possible Causes:
-Aug 03 07:19:32:743 [Thread-8954, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:32:743 [Thread-8954, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:35:764 [Thread-8955, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:35:764 [Thread-8955, pagerduty] Possible Causes:
-Aug 03 07:19:35:764 [Thread-8955, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:35:764 [Thread-8955, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:38:765 [Thread-8956, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:38:765 [Thread-8956, pagerduty] Possible Causes:
-Aug 03 07:19:38:765 [Thread-8956, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:38:765 [Thread-8956, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:41:776 [Thread-8957, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:41:776 [Thread-8957, pagerduty] Possible Causes:
-Aug 03 07:19:41:776 [Thread-8957, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:41:776 [Thread-8957, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:44:787 [Thread-8958, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:44:787 [Thread-8958, pagerduty] Possible Causes:
-Aug 03 07:19:44:787 [Thread-8958, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:44:787 [Thread-8958, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:47:808 [Thread-8959, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:47:808 [Thread-8959, pagerduty] Possible Causes:
-Aug 03 07:19:47:808 [Thread-8959, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:47:808 [Thread-8959, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:50:809 [Thread-8960, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:50:809 [Thread-8960, pagerduty] Possible Causes:
-Aug 03 07:19:50:809 [Thread-8960, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:50:809 [Thread-8960, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:53:830 [Thread-8961, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:53:830 [Thread-8961, pagerduty] Possible Causes:
-Aug 03 07:19:53:830 [Thread-8961, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:53:830 [Thread-8961, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:56:831 [Thread-8962, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:56:831 [Thread-8962, pagerduty] Possible Causes:
-Aug 03 07:19:56:831 [Thread-8962, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:56:831 [Thread-8962, pagerduty] 	2) The configuration of this probe does not match your environment.
-Aug 03 07:19:59:844 [Thread-8963, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (13) on response (for user login) for cmd = 'subscribe']
-Aug 03 07:19:59:844 [Thread-8963, pagerduty] Possible Causes:
-Aug 03 07:19:59:844 [Thread-8963, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
-Aug 03 07:19:59:844 [Thread-8963, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:36:03:416 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.activateOnTimer(NimProbeBase.java:416)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase.access$000(NimProbeBase.java:8)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at com.nimsoft.nimbus.NimProbeBase$OnTimerExecuteThread.run(NimProbeBase.java:465)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] Caused by: java.lang.ClassNotFoundException: org.apache.juli.logging.LogFactory
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.net.URLClassLoader$1.run(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.security.AccessController.doPrivileged(Native Method)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.net.URLClassLoader.findClass(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	at java.lang.ClassLoader.loadClass(Unknown Source)
+Aug 08 14:36:03:426 [Thread-0, pagerduty] 	... 12 more
+Aug 08 14:36:03:426 [Thread-0, pagerduty] NoClassDefFoundError: org/apache/juli/logging/LogFactory
+Aug 08 14:37:51:698 [main, pagerduty] Log Level = 4
+Aug 08 14:37:51:698 [main, pagerduty] Loading...
+Aug 08 14:37:51:748 [main, pagerduty] ****************[ Starting ]****************
+Aug 08 14:37:51:748 [main, pagerduty] 1.01
+Aug 08 14:37:51:748 [main, pagerduty] MorseCode Incorporated
+Aug 08 14:37:51:768 [main, pagerduty] port=48005
+Aug 08 14:37:51:798 [main, pagerduty] Only restricted security available, no login
+Aug 08 14:37:54:820 [Thread-0, pagerduty] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 14:37:54:830 [Thread-0, pagerduty] License valid until: 2016-03-01 00:00
+Aug 08 14:37:54:950 [Thread-0, pagerduty] Context Path: /pd
+Aug 08 14:37:54:950 [Thread-0, pagerduty] Webapp Path: srvr/http_gateway
+Aug 08 14:37:54:950 [Thread-0, pagerduty] Listen Port: 3082
+Aug 08 14:37:55:080 [Thread-0, pagerduty] Loading root (inc.morsecode.core.Gateway) /*
+Aug 08 14:37:55:080 [Thread-0, pagerduty] Starting HTTP Server
+Aug 08 14:37:55:870 [Thread-0, pagerduty] LifecycleException: Failed to start component [StandardServer[-1]]
+Aug 08 14:37:55:870 [Thread-0, pagerduty] class org.apache.catalina.LifecycleException
+Aug 08 14:37:55:950 [Thread-0, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:37:55:950 [Thread-0, pagerduty] Possible Causes:
+Aug 08 14:37:55:950 [Thread-0, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:37:55:950 [Thread-0, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:37:57:891 [Thread-3, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:37:57:891 [Thread-3, pagerduty] Possible Causes:
+Aug 08 14:37:57:891 [Thread-3, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:37:57:891 [Thread-3, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:38:00:912 [Thread-4, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:38:00:912 [Thread-4, pagerduty] Possible Causes:
+Aug 08 14:38:00:912 [Thread-4, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:38:00:912 [Thread-4, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:38:05:513 [Thread-5, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:38:05:513 [Thread-5, pagerduty] Possible Causes:
+Aug 08 14:38:05:513 [Thread-5, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:38:05:513 [Thread-5, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:38:09:134 [Thread-6, pagerduty] Queue Subscription Failure /UIM/MORSECODE/_hub queue=pagerduty [Received status (6) on response (for sendRcv) for cmd = 'subscribe']
+Aug 08 14:38:09:134 [Thread-6, pagerduty] Possible Causes:
+Aug 08 14:38:09:134 [Thread-6, pagerduty] 	1) Reset the admin credentials for this probe using callback: set_admin
+Aug 08 14:38:09:134 [Thread-6, pagerduty] 	2) The configuration of this probe does not match your environment.
+Aug 08 14:38:09:134 [Thread-6, pagerduty] Aborting probe startup due to failures.  Check configurations for admin and queue subscription.
