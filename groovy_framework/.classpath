@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpmime-4.5.jar"/>
 	<classpathentry kind="lib" path="build/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/lib.json.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/probe-http-gateway"/>
+	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
