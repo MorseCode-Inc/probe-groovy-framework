@@ -2,6 +2,7 @@ package inc.morsecode.pagerduty.api;
 
 import inc.morsecode.NDS;
 import inc.morsecode.core.ListResult;
+import inc.morsecode.nas.UIMAlarmMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,8 +98,8 @@ public class PagerDutyIncidentsAPI {
 	}
 	
 	
-	public JsonObject triggerNewIncident(PDService service, JsonArray contexts, JsonObject alarmData) throws IOException, MalformedJsonException {
-		JsonObject json= buildPdTrigger(service.getServiceKey(), alarmData, contexts);
+	public JsonObject triggerNewIncident(PDService service, JsonArray contexts, UIMAlarmMessage alarm) throws IOException, MalformedJsonException {
+		JsonObject json= buildPdTrigger(service.getServiceKey(), alarm, contexts);
 		
 		
 		// String uri= "/"+ service.getServiceKey() +"/events/enqueue";
@@ -112,7 +113,7 @@ public class PagerDutyIncidentsAPI {
 	}
 
 
-	public static JsonObject buildPdTrigger(String serviceKey, JsonObject alarmData, JsonArray contexts) {
+	public static JsonObject buildPdTrigger(String serviceKey, UIMAlarmMessage alarm, JsonArray contexts) {
 		JsonObject json= new JsonObject();
 		
 		// required
@@ -121,14 +122,41 @@ public class PagerDutyIncidentsAPI {
 		json.set("description", "ALert Message Description");
 		
 		// optional, but we will set the incident key to keep mapping back to nimsoft
-		json.set("incident_key", alarmData.get("nimid"));
+		json.set("incident_key", alarm.getNimid());
 		
 		// json.set("client", "pd_uim_gtw");
-		json.set("details", alarmData);
+		
+		// turn the alarm message into a JsonObject
+		JsonObject details= alarm.getBody().toJson();
+		JsonObject routing= new JsonObject();
+		
+		// append the UIM routing information
+		for (String key : alarm.keys()) {
+			routing.set(key, alarm.get(key));
+		}
+		
+		details.set("routing", routing);
+		
+		json.set("details", details);
 		
 		if (!contexts.isEmpty()) {
 			json.set("contexts", contexts);
 		}
 		return json;
+	}
+
+	public JsonObject send(PDTriggerEvent event) throws IOException, MalformedJsonException {
+		
+		
+		// String uri= "/"+ service.getServiceKey() +"/events/enqueue";
+		String uri= event.getService().getServiceKey() +"/events/enqueue";
+		// HttpRequest request= client.put("/incidents", json);
+		// HttpRequest request= client.buildPostRequest( , json, null);
+		System.out.println("SEND TRIGGER:\n"+ event);
+		
+		JsonObject resp= client.call("post", uri, event.toJson(), null);
+		// HttpResponse resp= client.execute((HttpUriRequest)request);
+		System.out.println("RESPONSE: \n"+ resp);
+		return resp;
 	}
 }

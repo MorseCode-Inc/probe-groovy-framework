@@ -13,7 +13,7 @@ import groovyjarjarantlr.debug.MessageListener;
 import inc.morsecode.NDS;
 import inc.morsecode.etc.Mutex;
 
-public class QueueSubscription extends NDS {
+public class QueueSubscription extends NDS implements Runnable {
 	
 	private Mutex lock= new Mutex();
 
@@ -21,6 +21,9 @@ public class QueueSubscription extends NDS {
 	
 	private Vector<UIMMessage> buffer;
 	private Vector<MessageHandler> listeners;
+	private Thread thread;
+	
+	private boolean ready= false;
 	
 	public QueueSubscription(String address, String clientName, String queue, int bulkSize) {
 		super(clientName); // "subscription");
@@ -30,23 +33,30 @@ public class QueueSubscription extends NDS {
 		set("bulk_size", Math.min(10000, Math.abs(bulkSize)));
 		this.listeners= new Vector<MessageHandler>();
 		this.buffer= new Vector<UIMMessage>();
+		this.ready= true;
+		thread= new Thread(this);
+		thread.start();
 	}
 	
 	public void register(MessageHandler listener) {
-		lock();
-		listeners.add(listener);
+		while (!lock()) {
+			try { Thread.sleep(33); } catch (InterruptedException ignored) { } 
+		}
+		if (!listeners.contains(listener)) { 
+			listeners.add(listener);
+		}
 		release();
 	}
 	
 	public void unregister(MessageHandler listener) {
-		lock();
+		while (!lock()) { try { Thread.sleep(33); } catch (InterruptedException ignored) { }  }
 		listeners.remove(listener);
 		release();
 	}
 	
 	public void subscribe() throws NimException {
 		try {
-			lock();
+			if (!lock()) { return; }
 		// NimUserLogin.login("administrator", "this4now");
 		String address= get("address", "no address specified");
 		if (this.subscription == null || !this.subscription.isOk()) {
@@ -76,29 +86,48 @@ public class QueueSubscription extends NDS {
 		
 	}
 	
+	public void run() { 
+		while (ready) {
+			
+			try { Thread.sleep(3000);  } catch (InterruptedException ignore) { }
+			
+			
+			try {
+				while (!lock()) { try { Thread.sleep(2); } catch (InterruptedException ignored) { }  }
+				
+				while (!buffer.isEmpty()) {
+					UIMMessage msg= buffer.remove(0);
+					MessageHandler[] handlers= listeners.toArray(new MessageHandler[]{});
+				
+					for (MessageHandler listener : handlers) {
+						try {
+							listener.handle(msg);
+						} catch (Throwable anything) {
+							System.err.println("Handler Error: "+ anything);
+							anything.printStackTrace();
+						}
+					}
+				}
+				} finally { 
+				release();
+			}
+		}
+	}
+	
 	public void receive(NimSession session, PDS envelope, PDS args) throws NimException {
-		
+		System.out.println("["+ envelope.get("subject") +":"+ envelope.get("nimid") +"] from "+ envelope.get("robot") +"("+ envelope.get("prid") +")");
 		try {
-			lock();
+			while (!lock()) { try { Thread.sleep(2); } catch (InterruptedException ignored) { }  }
 			try {
 				NDS message= NDS.create("message", envelope);
 				buffer.add(new UIMMessage(message));
 			} finally {
-				NDS reply= new NDS();
-				session.sendReply(0, reply.toPDS());
-				
 			}
 			
-			UIMMessage msg= buffer.remove(0);
-			MessageHandler[] handlers= listeners.toArray(new MessageHandler[]{});
-			for (MessageHandler listener : handlers) {
-				try {
-					listener.handle(msg);
-				} catch (Throwable anything) {
-					System.err.println("Handler Error: "+ anything);
-				}
-			}
+
 		} finally {
+			NDS reply= new NDS();
+			session.sendReply(0, reply.toPDS());
 			release();
 		}
 	}
@@ -128,6 +157,12 @@ public class QueueSubscription extends NDS {
 		return this.subscription.isOk();
 	}
 	
+	public void stop() {
+		if (subscription != null) {
+			subscription.close();
+		}
+		ready= false;
+	}
 	
 	private boolean lock() {
 		if (this.lock == null) { this.lock= new Mutex(); }

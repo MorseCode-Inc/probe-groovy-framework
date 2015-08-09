@@ -1,5 +1,9 @@
 package inc.morsecode.pagerduty;
 
+import java.io.IOException;
+
+import util.json.JsonArray;
+import util.json.ex.MalformedJsonException;
 import inc.morsecode.NDS;
 import inc.morsecode.nas.UIMAlarmAssign;
 import inc.morsecode.nas.UIMAlarmClose;
@@ -7,6 +11,9 @@ import inc.morsecode.nas.UIMAlarmNew;
 import inc.morsecode.nas.UIMAlarmUnassign;
 import inc.morsecode.nas.UIMAlarmUpdate;
 import inc.morsecode.pagerduty.api.PDClient;
+import inc.morsecode.pagerduty.api.PDService;
+import inc.morsecode.pagerduty.api.PDTriggerEvent;
+import inc.morsecode.pagerduty.api.PagerDutyIncidentsAPI;
 
 /**
  * 
@@ -24,11 +31,13 @@ public class AlarmManager {
 
 	private NDS alarms= new NDS("alarms");
 
+	private ServiceMapper smap;
+	
 	private PDClient client;
 	
-	public AlarmManager(PDClient client) {
+	public AlarmManager(PDClient client, ServiceMapper smap) {
 		this.client= client.newInstance();
-		
+		this.smap= smap;
 	}
 	
 	
@@ -86,41 +95,63 @@ public class AlarmManager {
 	 * @param alarm
 	 */
 	public void handle(UIMAlarmNew alarm) {
+		System.out.println("ALARM [alarm:"+ alarm.getNimid() +"] "+ alarm.getAlarmSeverity().toUpperCase() +" "+ alarm.getAlarmSource() +"("+ alarm.getAlarmHostname() +")" +": "+ alarm.getAlarmMessage());
 		
-		System.out.println("NEW Alarm "+ alarm.getAlarmSeverity().toUpperCase() +": "+ alarm.getAlarmMessage());
+		PDTriggerEvent event= smap.map(alarm);
+		
+		String serviceKey= event.getServiceKey();
+		
+		// PagerDutyIncidentsAPI.buildPdTrigger(serviceKey, alarm, new JsonArray());
+		
+// for now limit what is sent to PD
+if (!"outpost".equals(alarm.getAlarmRobot())) { return; }
+if (!"http_gateway".equals(alarm.getAlarmPrid())) { return; }
+		
+		try {
+			client.incidents().send(event);
+		} catch (IOException e) {
+			System.err.println("Error sending PagerDuty Event Trigger: "+ event);
+			e.printStackTrace();
+		} catch (MalformedJsonException e) {
+			System.err.println("Error sending PagerDuty Event Trigger: "+ event);
+			e.printStackTrace();
+		}
 	}
 	
 	
 	public void handle(UIMAlarmUpdate alarm) {
 		
-		System.out.println("UPDATE Alarm "+ alarm.getAlarmSeverity().toUpperCase() +": "+ alarm.getAlarmMessage());
-		System.out.println("subject: "+ alarm.getSubject());
+		System.out.println("UPDATE [alarm:"+ alarm.getNimid() +"] "+ alarm.getAlarmSeverity().toUpperCase() +" "+ alarm.getAlarmSource() +"("+ alarm.getAlarmHostname() +")" +": "+ alarm.getAlarmMessage());
+		// System.out.println("subject: "+ alarm.getSubject());
 		// System.out.println("body: \n"+ alarm.getBody());
-		System.out.println("message: \n"+ alarm.toJson());
-		System.out.println();
+		// System.out.println("message: \n"+ alarm.toJson());
+		// System.out.println();
 	}
 	
-	public void handle(UIMAlarmClose message) {
+	public void handle(UIMAlarmClose alarm) {
 		
-		System.out.println("subject: "+ message.getSubject());
-		System.out.println("body: \n"+ message.getBody());
-		System.out.println("message: \n"+ message.toJson());
-		System.out.println();
+		System.out.println("CLOSE [alarm:"+ alarm.getNimid() +"] "+ alarm);
+		//System.out.println("subject: "+ message.getSubject());
+		//System.out.println("body: \n"+ message.getBody());
+		//System.out.println("message: \n"+ message.toJson());
+		//System.out.println();
 	}
 	
-	public void handle(UIMAlarmAssign message) {
+	public void handle(UIMAlarmAssign alarm) {
 		
-		System.out.println("subject: "+ message.getSubject());
-		System.out.println("body: \n"+ message.getBody());
-		System.out.println("message: \n"+ message.toJson());
-		System.out.println();
+		System.out.println("ASSIGN [alarm:"+ alarm.getNimid() +"] "+ alarm);
+		// System.out.println("subject: "+ message.getSubject());
+		// System.out.println("body: \n"+ message.getBody());
+		// System.out.println("message: \n"+ message.toJson());
+		//System.out.println();
 	}
 	
-	public void handle(UIMAlarmUnassign message) {
+	public void handle(UIMAlarmUnassign alarm) {
 		
-		System.out.println("subject: "+ message.getSubject());
-		System.out.println("body: \n"+ message.getBody());
-		System.out.println("message: \n"+ message.toJson());
-		System.out.println();
+		System.out.println("UNASSIGN [alarm:"+ alarm.getNimid() +"] "+ alarm);
+		// System.out.println("subject: "+ message.getSubject());
+		// System.out.println("body: \n"+ message.getBody());
+		// System.out.println("message: \n"+ message.toJson());
+		//System.out.println();
 	}
 }

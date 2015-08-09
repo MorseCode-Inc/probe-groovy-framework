@@ -3,20 +3,18 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="groovy_framework/plugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="build/lib/groovy-all-2.4.3.jar"/>
-	<classpathentry kind="lib" path="build/lib/nimsoft.jar"/>
-	<classpathentry kind="lib" path="build/lib/Twofish.jar"/>
-	<classpathentry kind="lib" path="build/lib/tomcat-embed-core.jar"/>
-	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-core.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/ecj-4.4.jar"/>
-	<classpathentry kind="lib" path="build/lib/org.restlet.ext.apispark.jar"/>
-	<classpathentry kind="lib" path="build/lib/apache-http-commons/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpclient-4.5.jar"/>
-	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpcore-4.4.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpmime-4.5.jar"/>
-	<classpathentry kind="lib" path="build/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/lib.json.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-logging-juli.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/groovy-all-2.4.3.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/httpclient-4.5.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/httpmime-4.5.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/nimsoft.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-core.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/Twofish.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 
 import inc.morsecode.NDS;
+import inc.morsecode.etc.ArrayUtils;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -263,6 +264,14 @@ public class PDClient {
 			throw new RuntimeException("Unsupported HTTP Method: "+ httpMethod +".  Denying access to "+ uri +" {"+ data.toString().replaceAll("\r\n\t",  " ") +"}");
 		}
 		
+		System.out.println("HTTPClient\t"+ request.getRequestLine());
+		for (Header header : request.getAllHeaders()) {
+			System.out.println("HTTPClient\t"+ header);
+		}
+		
+		if (data != null) { 
+			System.out.println("\n"+ ArrayUtils.prefixMultiline(data.toString(), "\t"));
+		}
 		
 		// send it
 		HttpResponse response= execute((HttpUriRequest)request);

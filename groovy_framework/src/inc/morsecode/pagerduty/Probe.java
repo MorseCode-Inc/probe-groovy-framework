@@ -11,7 +11,10 @@ import inc.morsecode.core.HttpGateway;
 import inc.morsecode.core.MessageHandler;
 import inc.morsecode.core.QueueSubscription;
 import inc.morsecode.core.UIMMessage;
+import inc.morsecode.nas.UIMAlarmAssign;
+import inc.morsecode.nas.UIMAlarmClose;
 import inc.morsecode.nas.UIMAlarmNew;
+import inc.morsecode.nas.UIMAlarmUnassign;
 import inc.morsecode.nas.UIMAlarmUpdate;
 import inc.morsecode.pagerduty.api.PDClient;
 import inc.morsecode.pagerduty.api.PDService;
@@ -43,6 +46,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 	private boolean idle= true;
 	
 	private PDClient client;
+	private ServiceMapper smap;
 	
 	public Probe(String[] args) throws NimException {
 		super(PROBE_NAME, PROBE_VERSION, args);
@@ -86,6 +90,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 			
 			this.writeConfig("pagerduty", "services", (List)services, controllerRequest);
 			
+			smap= new ServiceMapper(services, config.seek("pagerduty/mapping/services", true));
 			
 		} catch (NimException e) {
 			e.printStackTrace();
@@ -194,6 +199,13 @@ public class Probe extends HttpGateway implements MessageHandler {
 		return true;
 	}
 	
+	@Override
+	public void shutdown() {
+		subscription.stop();
+		super.shutdown();
+		
+	}
+	
 	public static void main(String[] args) {
 
   		try {
@@ -232,15 +244,30 @@ public class Probe extends HttpGateway implements MessageHandler {
 	@Override
 	public boolean handle(UIMMessage message) {
 		
-		AlarmManager alarmManager= new AlarmManager(client);
+		AlarmManager alarmManager= new AlarmManager(client, smap);
+		
+		
+		// FIRST: Decide if this message is even something we care about.
+		// if not, then return as fast as we can.
 		
 		if ("alarm".equals(message.getSubject())) {
+			// raw alarm messages from probes, not always the best source to use
+			return true;
+			
 		} else if ("alarm_new".equals(message.getSubject())) {
 			alarmManager.handle(new UIMAlarmNew(message));
+			
 		} else if ("alarm_update".equals(message.getSubject())) {
 			alarmManager.handle(new UIMAlarmUpdate(message));
+			
+		} else if ("alarm_unassign".equals(message.getSubject())) {
+			alarmManager.handle(new UIMAlarmUnassign(message));
+			
 		} else if ("alarm_assign".equals(message.getSubject())) {
+			alarmManager.handle(new UIMAlarmAssign(message));
+			
 		} else if ("alarm_close".equals(message.getSubject())) {
+			alarmManager.handle(new UIMAlarmClose(message));
 			
 		}
 		
