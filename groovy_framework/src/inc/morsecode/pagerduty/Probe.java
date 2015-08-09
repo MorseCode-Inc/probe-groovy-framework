@@ -18,6 +18,7 @@ import inc.morsecode.nas.UIMAlarmUnassign;
 import inc.morsecode.nas.UIMAlarmUpdate;
 import inc.morsecode.pagerduty.api.PDClient;
 import inc.morsecode.pagerduty.api.PDService;
+import inc.morsecode.pagerduty.api.PagerDutyServicesAPI;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -84,7 +85,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 		
 		try {
 			NimRequest controllerRequest = controllerRequest();
-			List<PDService> services= client.incidents().listServices();
+			List<PDService> services= client.services().listServices();
 			// System.out.println(services);
 			// write the services that were discovered back to the configuration file
 			

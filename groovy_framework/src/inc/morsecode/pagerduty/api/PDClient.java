@@ -39,6 +39,7 @@ public class PDClient {
 	private HttpClient restlet;
 	
 	private PagerDutyIncidentsAPI incidents;
+	private PagerDutyServicesAPI servicesApi;
 	
 	public PDClient(String subdomain, String apiKey) {
 		this(subdomain, "pagerduty.com", apiKey);
@@ -53,14 +54,7 @@ public class PDClient {
 		this.restlet= HttpClients.createDefault();
 		
 	}
-	
-	public PagerDutyIncidentsAPI incidents() {
-		if (this.incidents == null) {
-			this.incidents= new PagerDutyIncidentsAPI(this);
-		}
-		return this.incidents;
-	}
-	
+
 	public String getSubdomain() {
 		return data.get("subdomain", "events");
 	}
@@ -195,33 +189,6 @@ public class PDClient {
     
     private HttpResponse execute(HttpUriRequest request) {
     	try {
-    		// System.out.println(request);
-
-            // Create a custom response handler
-    		/*
-            ResponseHandler<HttpResponse> responseHandler = new ResponseHandler<HttpResponse>() {
-
-                @Override
-                public HttpResponse handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    System.out.println(" RESPONSE > ");
-                    for (Header header : response.getAllHeaders()) {
-                    	// System.out.println(header);
-                    }
-                    System.out.println(response.getEntity());
-                    System.out.println();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
-                    }
-                    
-                    return response;
-                }
-
-            };
-            */
-            
             
             try {
             	HttpResponse response= restlet.execute(request); // , responseHandler);
@@ -240,8 +207,8 @@ public class PDClient {
     		
     	} finally {
     		
-    	System.out.flush();
-    	System.err.flush();
+    		System.out.flush();
+    		System.err.flush();
     	}
     	
     	return null;
@@ -326,5 +293,19 @@ public class PDClient {
 		return new PDClient(getSubdomain(), getTopLevelDomain(), getApiToken());
 	}
 
+	public PagerDutyServicesAPI services() {
+		if (this.servicesApi == null) {
+			this.servicesApi= new PagerDutyServicesAPI(this);
+		}
+		return this.servicesApi;
+	}
+	
+	public PagerDutyIncidentsAPI incidents() {
+		if (this.incidents == null) {
+			this.incidents= new PagerDutyIncidentsAPI(this);
+		}
+		return this.incidents;
+	}
+	
 	
 }

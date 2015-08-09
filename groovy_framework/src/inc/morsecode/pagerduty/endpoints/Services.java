@@ -44,7 +44,7 @@ public class Services extends Endpoint {
 		
 		PDClient client= probe.getClient().newInstance();
 		
-		List<PDService> services= client.incidents().listServices();
+		List<PDService> services= client.services().listServices();
 		
 		cgi.println("<table>");
 		for (PDService service : services) {

@@ -22,7 +22,7 @@ public class PagerDutyIncidentsAPI {
 	
 	public static final String GET = "GET";
 	private PDClient client;
-	private static final String CONTEXT= "services";
+	private static final String CONTEXT= "incidents";
 	
 	public enum Endpoints {
 		LIST("GET", CONTEXT)
@@ -52,22 +52,22 @@ public class PagerDutyIncidentsAPI {
 		this.client= client;
 	}
 
-	public List<PDService> listServices() throws IOException, MalformedJsonException {
+	public List<PDIncident> listIncidents() throws IOException, MalformedJsonException {
 		
-		ListResult<PDService> all= listServices(0, 1);
+		ListResult<PDIncident> all= listIncidents(0, 10);
 		
 		int total= all.getCount();
 		
 		if (total < 50) {
 			// just get all 50 in one transaction
-			return listServices(0, total);
+			return listIncidents(0, total);
 		} else {
 			
 			// break requests into chunks
 			int chunksize= 25;
 			
 			for (int i= 0; i < total; i+= chunksize) {
-				all.addAll(listServices(i, chunksize));
+				all.addAll(listIncidents(i, chunksize));
 			}
 			
 		}
@@ -76,28 +76,29 @@ public class PagerDutyIncidentsAPI {
 		
 	}
 
-	public ListResult<PDService> listServices(int offset, int limit) throws IOException, MalformedJsonException {
+	public ListResult<PDIncident> listIncidents(int offset, int limit) throws IOException, MalformedJsonException {
 		
 		NDS params= new NDS();
 		params.set("offset", offset);
 		params.set("limit", limit);
 		
-		JsonObject data= client.call(GET, "/api/v1/services", null, params);
+		JsonObject data= client.call(GET, "/api/v1/incidents", null, params);
 		
 		JsonArray array= (JsonArray)data.get("services", new JsonArray());
-		ListResult<PDService> services= new ListResult<PDService>(data.get("total", 0));
+		ListResult<PDIncident> incidents= new ListResult<PDIncident>(data.get("total", 0));
 		
 		for(JsonValue obj : array) {
 			if (obj instanceof JsonObject) {
-				PDService service= new PDService(((JsonObject) obj).get("name", "invalid"), ((JsonObject) obj));
-				services.add(service);
+				PDIncident incident= new PDIncident((JsonObject)obj);
+				incidents.add(incident);
 			}
 		}
 		
-		return services;
+		return incidents;
 	}
 	
 	
+	/*
 	public JsonObject triggerNewIncident(PDService service, JsonArray contexts, UIMAlarmMessage alarm) throws IOException, MalformedJsonException {
 		JsonObject json= buildPdTrigger(service.getServiceKey(), alarm, contexts);
 		
@@ -111,6 +112,7 @@ public class PagerDutyIncidentsAPI {
 		// HttpResponse resp= client.execute((HttpUriRequest)request);
 		return resp;
 	}
+	*/
 
 
 	public static JsonObject buildPdTrigger(String serviceKey, UIMAlarmMessage alarm, JsonArray contexts) {
