@@ -1,18 +1,68 @@
-Aug 08 22:45:58:774 [nimclient, pagerduty_gtw] java.lang.reflect.InvocationTargetException
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at com.nimsoft.nimbus.NimSubscribe.callbackProxy(NimSubscribe.java:263)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at com.nimsoft.nimbus.NimServerSession$ThreadClient.run(NimServerSession.java:181)
-Caused by: java.util.ConcurrentModificationException
-	at java.util.ArrayList$Itr.checkForComodification(Unknown Source)
-	at java.util.ArrayList$Itr.next(Unknown Source)
-	at inc.morsecode.core.QueueSubscription.receive(QueueSubscription.java:78)
-	... 10 more
+Aug 08 23:08:43:219 [nimclient, pagerduty_gtw] message: 
+{
+	"nimts":1439096861, 	 "udata":{
+	 	"sid":1.1
+	 	, "nimts":1439080933
+	 	, "tz_offset":14400
+	 	, "visible":1
+	 	, "dev_id":"D52248754FCF4FDAE7378AB198CD0EDA0"
+	 	, "event_type":2
+	 	, "origin":"CLOUD"
+	 	, "subsys":"Alarm"
+	 	, "hostname":"morsecode-inc.com"
+	 	, "robot":"outpost"
+	 	, "severity":"critical"
+	 	, "prid":"http_gateway"
+	 	, "hub":"MORSECODE"
+	 	, "message":"Missing 214 Heartbeats from 104.167.97.87; last transmission was 2d 5h 36m seconds ago"
+	 	, "prevlevel":5
+	 	, "supptime":1439096855
+	 	, "level":5
+	 	, "supp_key":"heartbeat/104.167.97.87"
+	 	, "met_id":"Me3508f478866f33fbab6f1a92bebae21"
+	 	, "source":"104.167.97.87"
+	 	, "nimid":"QY00588503-62279"
+	 	, "domain":"UIM"
+	 	, "suppcount":53
+	 	, "arrival":1439080952
+	 	, "nas":"MORSECODE"
+	 	, "rowid":1
+	 }
+	, "tz_offset":14400
+	, "subject":"alarm_update"
+	, "hop0":"MORSECODE"
+	, "origin":"MORSECODE"
+	, "prid":"nas"
+	, "robot":"_hub"
+	, "pri":1
+	, "qsize":1
+	, "source":"162.248.167.44"
+	, "domain":"UIM"
+	, "nimid":"QY00588503-71186"
+	, "hop":0
+}
+Aug 08 23:08:43:229 [nimclient, pagerduty_gtw] 
 
-Aug 08 22:46:02:195 [Thread-18, pagerduty_gtw] Subscription to queue /UIM/MORSECODE/_hub:pagerduty established.
+Aug 08 23:15:23:025 [main, pagerduty_gtw] Log Level = 4
+Aug 08 23:15:23:025 [main, pagerduty_gtw] Loading...
+Aug 08 23:15:23:045 [main, pagerduty_gtw] ****************[ Starting ]****************
+Aug 08 23:15:23:045 [main, pagerduty_gtw] 0.12
+Aug 08 23:15:23:045 [main, pagerduty_gtw] MorseCode Incorporated
+Aug 08 23:15:23:055 [main, pagerduty_gtw] port=48005
+Aug 08 23:15:23:095 [main, pagerduty_gtw] Only restricted security available, no login
+Aug 08 23:15:26:127 [Thread-0, pagerduty_gtw] Reading License: Demo|2|2016-03-01 00:00
+Aug 08 23:15:26:127 [Thread-0, pagerduty_gtw] License valid until: 2016-03-01 00:00
+Aug 08 23:15:26:287 [Thread-0, pagerduty_gtw] Context Path: /pd
+Aug 08 23:15:26:287 [Thread-0, pagerduty_gtw] Webapp Path: srvr/pagerduty
+Aug 08 23:15:26:287 [Thread-0, pagerduty_gtw] Listen Port: 3082
+Aug 08 23:15:26:357 [Thread-0, pagerduty_gtw] Loading admin (inc.morsecode.pagerduty.endpoints.ProbeAdmin) /admin/*
+Aug 08 23:15:26:357 [Thread-0, pagerduty_gtw] Loading services (inc.morsecode.pagerduty.endpoints.Services) /services/*
+Aug 08 23:15:26:357 [Thread-0, pagerduty_gtw] Loading root (inc.morsecode.core.Gateway) /*
+Aug 08 23:15:26:357 [Thread-0, pagerduty_gtw] Starting HTTP Server
+Aug 08 23:15:29:518 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:518 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:798 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:798 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:798 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:798 [Thread-0, pagerduty_gtw] >> ]
+Aug 08 23:15:29:838 [Thread-3, pagerduty_gtw] Subscription to queue /UIM/MORSECODE/_hub:pagerduty established.

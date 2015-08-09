@@ -15,8 +15,8 @@
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpcore-4.4.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/apache-http-commons/httpmime-4.5.jar"/>
 	<classpathentry kind="lib" path="build/lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/lib.json.jar"/>
 	<classpathentry kind="lib" path="pagerduty/lib/tomcat-embed-logging-juli.jar"/>
+	<classpathentry kind="lib" path="pagerduty/lib/http_gateway.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
