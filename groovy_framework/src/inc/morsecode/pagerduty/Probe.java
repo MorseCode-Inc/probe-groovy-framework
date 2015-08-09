@@ -37,7 +37,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 	private boolean firstboot= true;
 	
 	public final static String PROBE_NAME= "pagerduty_gtw";
-	public final static String PROBE_VERSION= "1.01";
+	public final static String PROBE_VERSION= "0.12";
 	public final static String QOS_GROUP= "PagerDuty";
 	
 	private boolean idle= true;
@@ -81,7 +81,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 		try {
 			NimRequest controllerRequest = controllerRequest();
 			List<PDService> services= client.incidents().listServices();
-			System.out.println(services);
+			// System.out.println(services);
 			// write the services that were discovered back to the configuration file
 			
 			this.writeConfig("pagerduty", "services", (List)services, controllerRequest);
