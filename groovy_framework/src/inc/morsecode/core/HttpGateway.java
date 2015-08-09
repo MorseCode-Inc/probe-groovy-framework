@@ -5,10 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.text.ParseException;
+import java.util.List;
 
 import inc.morsecode.NDS;
 import inc.morsecode.NDSValue;
 import inc.morsecode.NimLogPrintWriter;
+import inc.morsecode.pagerduty.Probe;
 import inc.morsecode.pagerduty.ProbeLicense;
 
 import javax.servlet.ServletException;
@@ -48,10 +50,7 @@ import com.nimsoft.nimbus.ci.ConfigurationItem;
 
 public abstract class HttpGateway extends NimProbe implements org.apache.catalina.LifecycleListener, CustomProbeInterface {
 	
-	public final static String PROBE_NAME= "pagerduty";
-	public final static String PROBE_VERSION= "1.01";
 	public final static String PROBE_MANUFACTURER= "MorseCode Incorporated";
-	public final static String QOS_GROUP= "PagerDuty";
 	
 	public static String SUBSYSTEM_ID= "3.6526.3";
 	
@@ -72,14 +71,11 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	private Thread tomcatThread;
 	
 	private boolean ready= false;
+	private boolean admin= false;
 	private boolean startup= true;
 	
-	protected HttpGateway(String alpha, String[] args) throws NimException {
-		this(args);
-		Decode.Secret.alphabet= alpha;
-	}
 	
-	public HttpGateway(String[] args) throws NimException {
+	public HttpGateway(String PROBE_NAME, String PROBE_VERSION, String[] args) throws NimException {
 		this(PROBE_NAME, PROBE_VERSION, PROBE_MANUFACTURER, args);
 		Decode.Secret.alphabet= "y>\'IFn5?shifOt\\kSqz]JgYxN-,)2@(3wV<Dcup:L MGBZP6~aH;Em8_#94/*%X+=dC1Rb\"{r[WU}.^QKjloA`Tv0$e|&7!";
 		// SimpleCalendar cal= new SimpleCalendar();
@@ -170,6 +166,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 					System.out.println("MSG001 Probe admin authentication enabled, but configuration is incomplete.  Run set_admin using the probe utility.");
 				} else {
 					NimUserLogin.login(Decode.decode(token), Decode.decode(key));
+					admin= true;
 				}
 			}
 		} catch (NimException nx) {
@@ -206,6 +203,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		return controllerInfo;
 	}
 	
+	public NDS getConfig() { return config; }
 
 	public abstract void probeCycle();
 	
@@ -296,14 +294,16 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		   	  tomcat.setBaseDir("."); // /home/bcmorse/workspaces/probe-marketplace/embedded_tomcat");
 		   	  tomcat.getHost().setAppBase(".");
 
-		   	  String contextRoot = config.get("setup/endpoints/context", "/nimbus");
-			String contextPath = endpoints.get("context", contextRoot);
+		   	  String contextRoot = config.get("setup/endpoints/context", "/pd");
+		   	  String contextPath = endpoints.get("context", contextRoot);
+		   	  
 		   	  if ("".equals(contextPath)) {
 		   		  // fail
 		   		  log.fatal("context must be specified, cannot be empty and must begin with /.  example: /nimbus");
 		   		  System.exit(-1);
 		   	  }
-		   	  String warpath= "srvr/http_gateway";
+		   	  
+		   	  String warpath= "srvr/pagerduty";
 		   	  
 		   	  System.out.println("Context Path: "+ contextPath);
 		   	  System.out.println("Webapp Path: "+ warpath);
@@ -343,7 +343,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		   			  String servletClass = webapp.get("servlet", ""); // "inc.morsecode.probes.http_gateway.Gateway");
 		   			  
 		   			  if (!servletClass.startsWith("inc.morsecode.") && !servletClass.contains(".")) {
-		   				  servletClass= "inc.morsecode.http_gateway.endpoints." + servletClass;
+		   				  servletClass= "inc.morsecode.pagerduty.endpoints." + servletClass;
 		   			  }
 		   			  
 		   			  web.setServletClass(servletClass);
@@ -469,6 +469,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		
 		try {
 			NimUserLogin.login(user, password);
+			admin= true;
 		} catch (NimException error) {
 			response.set("status", "Error: "+ error.getMessage());
 			session.sendReply(0, response.toPDS());
@@ -476,7 +477,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		}
 		
 		// we logged in, need to write to the configuration file somehow now.
-		NimRequest controller= new NimRequest("controller", "get_info");
+		NimRequest controller= controllerRequest();
 		
 		NDS status = writeConfig("/setup/admin", "token", Encode.encode(user), controller);
 		status = writeConfig("/setup/admin", "key", Encode.encode(password), controller);
@@ -497,20 +498,44 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		session.sendReply(0, response.toPDS());
 	}
 
+	public NimRequest controllerRequest() {
+		return new NimRequest("controller", "get_info");
+	}
+
 	protected NDS writeConfig(String section, String key, String value, NimRequest controller) throws NimException {
 		NDS nds= new NDS();
 		
-		nds.set("name", HttpGateway.PROBE_NAME);		// probe name
+		nds.set("name", getProbeName());		// probe name
 		nds.set("section", section);		// 
 		nds.set("key", key);				// 
 		nds.set("value", value);	// 
 		nds.set("lockid", 1);	// 
 		nds.set("robot", "/"+ controllerInfo.get("domain") +"/"+ controllerInfo.get("hubname") +"/"+ controllerInfo.get("robotname"));	// 
 		
-		NDS status= NDS.create(controller.send("probe_config_set", nds.toPDS()));
+		NDS status= NDS.create("response", controller.send("probe_config_set", nds.toPDS()));
 		return status;
 	}
 	
+	
+	protected void writeConfig(String path, String name, List<NDS> data, NimRequest controllerRequest) throws NimException {
+		
+		for (NDS nds : data) {
+			writeConfig(path +"/"+ name, nds.getName().replaceAll("//*", "_"), nds, controllerRequest);
+		}
+		
+	}
+	
+	protected void writeConfig(String path, String name, NDS data, NimRequest controllerRequest) throws NimException {
+		
+		for (String key : data.keys()) {
+			writeConfig(path +"/"+ name, key.replaceAll("//*", "_"), data.get(key), controllerRequest);
+		}
+		
+		for (NDS tag : data) {
+			writeConfig(path +"/"+ name, tag.getName().replaceAll("//*", "_"), tag, controllerRequest);
+		}
+		
+	}
 	
 	static public long getInterval() {
 		long ifNull= config.get("setup/run.interval", 10);
@@ -607,7 +632,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		
 		NimRequest request= new NimRequest(address, command, args.toPDS());
 		
-		NDS response= NDS.create(request.send());
+		NDS response= NDS.create("response", request.send());
 		
 		request.close();
 		return response;
@@ -807,7 +832,7 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		
 		boolean authorized= false;
 		
-		NDS authorizedClients = config.seek("setup/security/authorized_clients");
+		NDS authorizedClients = config.seek("setup/security/authorized_clients", true);
 		
 		// security/authorized_clients is disabled, allow any client
 		if (!authorizedClients.isActive()) { return true; }
@@ -848,6 +873,10 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	}
 	
 
+	
+	public boolean isAdmin() {
+		return admin;
+	}
 
 
 private final static class Decode {
@@ -903,5 +932,7 @@ private final static class Decode {
 	*/
 
 }
+
+
 
 }

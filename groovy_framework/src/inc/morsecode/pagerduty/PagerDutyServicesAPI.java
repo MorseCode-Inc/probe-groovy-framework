@@ -49,9 +49,9 @@ public class PagerDutyServicesAPI {
 	public ListResult<PDService> listAllServices() throws IOException, MalformedJsonException {
 		
 		int offset= 0;
-		int limit= 1;
+		int limit= 12;
 		
-		ListResult<PDService> all= listServices(offset, limit);
+		ListResult<PDService> all= listServices(offset, limit * 2);
 		
 		offset+= limit;
 		if (all.getCount() > limit) {
@@ -65,8 +65,6 @@ public class PagerDutyServicesAPI {
 			}
 			
 		}
-		
-		
 		
 		return all;
 	}

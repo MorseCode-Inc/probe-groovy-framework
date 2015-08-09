@@ -19,12 +19,11 @@ public class QueueSubscription extends NDS {
 	private ArrayList<UIMMessage> buffer;
 	private ArrayList<MessageHandler> listeners;
 	
-	public QueueSubscription(String address, String clientName, String subject, int bulkSize) {
+	public QueueSubscription(String address, String clientName, String queue, int bulkSize) {
 		super(clientName); // "subscription");
 		set("address", address);
 		set("name", clientName);
-		set("subject", subject);
-		set("queue", subject);
+		set("queue", queue);
 		set("bulk_size", Math.min(10000, Math.abs(bulkSize)));
 		this.listeners= new ArrayList<MessageHandler>();
 		this.buffer= new ArrayList<UIMMessage>();
@@ -52,6 +51,10 @@ public class QueueSubscription extends NDS {
 		
 		String queueName= getQueueName();
 		
+		if (subscription.isOk()) { 
+			return;
+		}
+		
 		if (getBulkSize() <= 1) {
 			this.subscription.subscribeForQueue(queueName, this, "receive");
 		} else {
@@ -63,7 +66,7 @@ public class QueueSubscription extends NDS {
 	
 	public void receive(NimSession session, PDS envelope, PDS args) throws NimException {
 		try {
-			NDS message= NDS.create(envelope);
+			NDS message= NDS.create("message", envelope);
 			buffer.add(new UIMMessage(message));
 		} finally {
 			NDS reply= new NDS();

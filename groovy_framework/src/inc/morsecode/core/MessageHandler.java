@@ -7,4 +7,5 @@ public interface MessageHandler {
 	
 	public boolean handle(UIMMessage message);
 
+
 }

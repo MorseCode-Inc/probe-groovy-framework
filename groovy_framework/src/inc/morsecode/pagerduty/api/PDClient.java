@@ -37,6 +37,8 @@ public class PDClient {
 	private NDS services;
 	private HttpClient restlet;
 	
+	private PagerDutyIncidentsAPI incidents;
+	
 	public PDClient(String subdomain, String apiKey) {
 		this(subdomain, "pagerduty.com", apiKey);
 	}
@@ -49,6 +51,13 @@ public class PDClient {
 		
 		this.restlet= HttpClients.createDefault();
 		
+	}
+	
+	public PagerDutyIncidentsAPI incidents() {
+		if (this.incidents == null) {
+			this.incidents= new PagerDutyIncidentsAPI(this);
+		}
+		return this.incidents;
 	}
 	
 	public String getSubdomain() {
@@ -302,6 +311,10 @@ public class PDClient {
 		alarmData.set("last_received_ts", "2015-01-01 14:44:00");
 		alarmData.set("origin_ts", "2015-01-01 14:44:00");
 		return alarmData;
+	}
+
+	public PDClient newInstance() {
+		return new PDClient(getSubdomain(), getTopLevelDomain(), getApiToken());
 	}
 
 	

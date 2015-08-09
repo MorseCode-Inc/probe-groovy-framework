@@ -1,8 +1,11 @@
 package inc.morsecode.core;
 
+import java.util.List;
+
 import inc.morsecode.NDS;
 
 import com.nimsoft.nimbus.NimException;
+import com.nimsoft.nimbus.NimRequest;
 
 public interface CustomProbeInterface {
 
@@ -60,5 +63,6 @@ public interface CustomProbeInterface {
 	public abstract NDS call(String address, String command, int retries, String[]... params) throws NimException;
 
 	public abstract NDS getMessage(String name);
+	
 
 }

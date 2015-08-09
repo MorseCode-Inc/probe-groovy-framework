@@ -13,9 +13,22 @@ import util.json.JsonObject;
 import inc.morsecode.NDS;
 import inc.morsecode.pagerduty.PDConstants.EventType;
 
+/**
+ * 
+ * &copy; MorseCode Incorporated 2015<br/>
+ * =--------------------------------=<br/><pre>
+ * Created: Aug 8, 2015
+ * Project: probe-pager-duty-gateway
+ *
+ * Description:
+ * 
+ * </pre></br>
+ * =--------------------------------=
+ */
 public class PDService extends NDS {
 	
 	private NDS details= new NDS("details");
+	
 	
 	 public PDService(String name, String key) {
 		 set("name", name);
@@ -23,6 +36,38 @@ public class PDService extends NDS {
 	 }
 	 
 
+	 /**
+	  * <pre>
+	  * outpost>
+	  *   scheduled_actions = []
+	  *   service_url = /services/PAPCXT0
+	  *   status = active
+	  *   auto_resolve_timeout = 14400
+	  *   last_incident_timestamp = 2015-08-02T16:58:37-06:00
+	  *   email_filter_mode = all-email
+	  *   acknowledgement_timeout = 1800
+	  *   type = generic_events_api
+	  *   id = PAPCXT0
+	  *   service_key = c64252179f5b4acda00d83091dadc17a
+	  *   description = null
+	  *   name = outpost
+	  *   created_at = 2015-08-02T16:50:12-06:00
+	  * incident_counts>
+	  * 	total = 1
+	  * 	resolved = 1
+	  * 	acknowledged = 0
+	  * 	triggered = 0
+	  * /incident_counts>
+	  * incident_urgency_rule>
+	  * 	type = constant
+	  * 	urgency = high
+	  * /incident_urgency_rule>
+	  * /outpost>
+	  * 
+	  * </pre>
+	  * @param name
+	  * @param json
+	  */
 	public PDService(String name, JsonObject json) {
 		super(name, json);
 	}

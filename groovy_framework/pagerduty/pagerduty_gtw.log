@@ -1,0 +1,18 @@
+Aug 08 22:45:58:774 [nimclient, pagerduty_gtw] java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.nimsoft.nimbus.NimSubscribe.callbackProxy(NimSubscribe.java:263)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.nimsoft.nimbus.NimServerSession$ThreadClient.run(NimServerSession.java:181)
+Caused by: java.util.ConcurrentModificationException
+	at java.util.ArrayList$Itr.checkForComodification(Unknown Source)
+	at java.util.ArrayList$Itr.next(Unknown Source)
+	at inc.morsecode.core.QueueSubscription.receive(QueueSubscription.java:78)
+	... 10 more
+
+Aug 08 22:46:02:195 [Thread-18, pagerduty_gtw] Subscription to queue /UIM/MORSECODE/_hub:pagerduty established.

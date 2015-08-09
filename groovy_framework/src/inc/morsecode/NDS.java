@@ -205,8 +205,8 @@ public class NDS extends NDSValue implements Iterable<NDS> {
 	}
 
 
-	public static NDS create(PDS pds) throws NimException {
-		NDS nds= new NDS();
+	public static NDS create(String tag, PDS pds) throws NimException {
+		NDS nds= new NDS(tag);
 		
 		Enumeration<String> keys= pds.keys();
 		
@@ -230,7 +230,7 @@ public class NDS extends NDSValue implements Iterable<NDS> {
 				
 				PDS section= pds.getPDS(key);
 				
-				nds.set(key, NDS.create(section));
+				nds.set(key, NDS.create(key, section));
 				
 				break;
 			case PDS.PDS_PPDS:
@@ -239,7 +239,7 @@ public class NDS extends NDSValue implements Iterable<NDS> {
 				
 				int i= 0;
 				for (PDS node : pds.getTablePDSs(key)) {
-					sections.set(""+ (i++), NDS.create(node));
+					sections.set(""+ (i), NDS.create(""+ (i++), node));
 				}
 				
 				nds.set(key, sections);
@@ -931,7 +931,11 @@ public class NDS extends NDSValue implements Iterable<NDS> {
 		
 		for (String key : attributes.keySet()) {
 			String value= get(key, (String)null);
-			string+= indent + key +" = "+ value +"\n";
+			if (sections.containsKey(key)) {
+				string+= "\n"+ sections.get(key) +"\n";
+			} else {
+				string+= indent + key +" = "+ value +"\n";
+			}
 		}
 		
 		for (NDS section : sectionList) {

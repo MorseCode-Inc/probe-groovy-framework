@@ -1,6 +1,7 @@
 package inc.morsecode.pagerduty.api;
 
 import inc.morsecode.NDS;
+import inc.morsecode.core.ListResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,8 +51,31 @@ public class PagerDutyIncidentsAPI {
 		this.client= client;
 	}
 
+	public List<PDService> listServices() throws IOException, MalformedJsonException {
+		
+		ListResult<PDService> all= listServices(0, 1);
+		
+		int total= all.getCount();
+		
+		if (total < 50) {
+			// just get all 50 in one transaction
+			return listServices(0, total);
+		} else {
+			
+			// break requests into chunks
+			int chunksize= 25;
+			
+			for (int i= 0; i < total; i+= chunksize) {
+				all.addAll(listServices(i, chunksize));
+			}
+			
+		}
+		
+		return all;
+		
+	}
 
-	public List<PDService> listServices(int offset, int limit) throws IOException, MalformedJsonException {
+	public ListResult<PDService> listServices(int offset, int limit) throws IOException, MalformedJsonException {
 		
 		NDS params= new NDS();
 		params.set("offset", offset);
@@ -60,7 +84,7 @@ public class PagerDutyIncidentsAPI {
 		JsonObject data= client.call(GET, "/api/v1/services", null, params);
 		
 		JsonArray array= (JsonArray)data.get("services", new JsonArray());
-		ArrayList<PDService> services= new ArrayList<PDService>();
+		ListResult<PDService> services= new ListResult<PDService>(data.get("total", 0));
 		
 		for(JsonValue obj : array) {
 			if (obj instanceof JsonObject) {

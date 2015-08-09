@@ -1,6 +1,7 @@
 package inc.morsecode.core;
 
 import inc.morsecode.NDS;
+import inc.morsecode.pagerduty.Probe;
 import inc.morsecode.probes.http_gateway.CGI;
 
 import java.io.IOException;
@@ -48,6 +49,11 @@ public abstract class Endpoint extends HttpServlet {
 		 * */
 	}
 	
+	/*
+	public void setProbe(Probe probe, NDS config) {
+		this.setProbe((HttpGateway)probe, config);
+	}
+	*/
 	
 	public void setProbe(HttpGateway probe, NDS config) {
 		this.probe = probe;
