@@ -5,13 +5,7 @@ import inc.morsecode.core.ListResult;
 import inc.morsecode.nas.UIMAlarmMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
 
 import util.json.JsonArray;
 import util.json.JsonObject;
@@ -98,6 +92,44 @@ public class PagerDutyIncidentsAPI {
 	}
 	
 	
+	public PDIncident getIncident(String id) throws IOException, MalformedJsonException {
+		
+		String uri = "/api/v1/incidents";
+		
+		JsonObject data= client.call(GET, uri+ "/"+ id, null, null);
+		
+		JsonArray array= (JsonArray)data.get("services", new JsonArray());
+		ListResult<PDIncident> incidents= new ListResult<PDIncident>(data.get("total", 0));
+		
+		for(JsonValue obj : array) {
+			if (obj instanceof JsonObject) {
+				PDIncident incident= new PDIncident((JsonObject)obj);
+				incidents.add(incident);
+			}
+		}
+		
+		return incidents;
+	}
+	
+	public int getIncidentCount() throws IOException, MalformedJsonException {
+		
+		
+		JsonObject data= client.call(GET, "/api/v1/incidents" +"/count", null, null);
+		
+		JsonArray array= (JsonArray)data.get("services", new JsonArray());
+		ListResult<PDIncident> incidents= new ListResult<PDIncident>(data.get("total", 0));
+		
+		for(JsonValue obj : array) {
+			if (obj instanceof JsonObject) {
+				PDIncident incident= new PDIncident((JsonObject)obj);
+				incidents.add(incident);
+			}
+		}
+		
+		return incidents;
+	}
+	
+	
 	/*
 	public JsonObject triggerNewIncident(PDService service, JsonArray contexts, UIMAlarmMessage alarm) throws IOException, MalformedJsonException {
 		JsonObject json= buildPdTrigger(service.getServiceKey(), alarm, contexts);
@@ -154,9 +186,11 @@ public class PagerDutyIncidentsAPI {
 		String uri= event.getService().getServiceKey() +"/events/enqueue";
 		// HttpRequest request= client.put("/incidents", json);
 		// HttpRequest request= client.buildPostRequest( , json, null);
+		uri= "https://events.pagerduty.com/generic/2010-04-15/create_event.json";
+		uri= "https://redonkulizer-toy.herokuapp.com/redonkulize/passthrough/"+ event.getServiceKey();
 		System.out.println("SEND TRIGGER:\n"+ event);
 		
-		JsonObject resp= client.call("post", uri, event.toJson(), null);
+		JsonObject resp= client.call("post", uri, event.toJson(), null, false);
 		// HttpResponse resp= client.execute((HttpUriRequest)request);
 		System.out.println("RESPONSE: \n"+ resp);
 		return resp;

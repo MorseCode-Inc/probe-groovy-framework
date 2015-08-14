@@ -26,6 +26,7 @@ public class PDTriggerEvent {
 		this.data= new NDS();
 		this.service= service;
 		
+		setEventType("trigger");
 		setServiceKey(service.getServiceKey());
 		setIncidentKey(alarm.getAlarmSuppKey());
 		setDescription(alarm.getAlarmMessage());

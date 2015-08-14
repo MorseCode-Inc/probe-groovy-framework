@@ -85,28 +85,28 @@ public class PDClient {
 		return services.get(name +"/token", (String) null);
 	}
 	
-    public HttpGet get(String uri, NDS params) {
-    	return (HttpGet)this.http("get", uri, null, params);
+    public HttpGet get(String uri, NDS params, boolean auth) {
+    	return (HttpGet)this.http("get", uri, null, params, auth);
     }
 	
-    public HttpRequest buildPostRequest(String uri, JsonObject data, NDS params) {
-    	return this.http("post", uri, data, params);
+    public HttpRequest buildPostRequest(String uri, JsonObject data, NDS params, boolean auth) {
+    	return this.http("post", uri, data, params, auth);
     }
     
-    public HttpRequest delete(String uri, JsonObject data, NDS params) {
-    	return this.http("delete", uri, data, params);
+    public HttpRequest delete(String uri, JsonObject data, NDS params, boolean auth) {
+    	return this.http("delete", uri, data, params, auth);
     }
 
-    public HttpRequest put(String uri, JsonObject data, NDS params) {
-    	return this.http("put", uri, data, params);
+    public HttpRequest put(String uri, JsonObject data, NDS params, boolean auth) {
+    	return this.http("put", uri, data, params, auth);
     }
     
-    public HttpRequest post(String uri, JsonObject data, NDS params) {
-    	return this.http("post", uri, data, params);
+    public HttpRequest post(String uri, JsonObject data, NDS params, boolean auth) {
+    	return this.http("post", uri, data, params, auth);
     }
     
     
-    private HttpRequest http(String method, String uri, JsonObject data, NDS params) {
+    private HttpRequest http(String method, String uri, JsonObject data, NDS params, boolean auth) {
     	HttpRequest request= null;
     	if (uri == null) {
     		throw new RuntimeException("URI cannot be null, missing required argument to http(method, uri, data, params).");
@@ -165,7 +165,9 @@ public class PDClient {
 			}
 		}
     	
+    	if (auth) {
 		request.setHeader("Authorization", "Token token="+ getApiToken());
+    	}
 		
 		
 		boolean debugging= false;
@@ -215,17 +217,20 @@ public class PDClient {
     }
     
 	public JsonObject call(String httpMethod, String uri, JsonObject data, NDS params) throws IOException, MalformedJsonException {
+		return call(httpMethod, uri, data, params, true);
+	}
+	public JsonObject call(String httpMethod, String uri, JsonObject data, NDS params, boolean auth) throws IOException, MalformedJsonException {
 		
 		HttpRequest request= null;
 		
 		if ("put".equalsIgnoreCase(httpMethod)) {
-			request= buildPostRequest(uri, data, params);
+			request= buildPostRequest(uri, data, params, auth);
 		} else if ("get".equalsIgnoreCase(httpMethod)) {
-			request= get(uri, params);
+			request= get(uri, params, auth);
 		} else if ("delete".equalsIgnoreCase(httpMethod)) {
-			request= delete(uri, data, params);
+			request= delete(uri, data, params, auth);
 		} else if ("post".equalsIgnoreCase(httpMethod)) {
-			request= post(uri, data, params);
+			request= post(uri, data, params, auth);
 		} else {
 			// unsupported method
 			throw new RuntimeException("Unsupported HTTP Method: "+ httpMethod +".  Denying access to "+ uri +" {"+ data.toString().replaceAll("\r\n\t",  " ") +"}");
