@@ -264,6 +264,52 @@ public class PDClient {
 				String string = baos.toString();
 				JsonObject json= JsonParser.parse(string);
 				
+				// look for errors back from the PagerDuty API
+				/*
+				 * HTTPClient	GET https://morsecode-incorporated.pagerduty.com/api/v1/incidents/1 HTTP/1.1
+					HTTPClient	Authorization: Token token=PnKQyzNjQEjsRfodeTwa
+					Incident ID: 1
+					Incident Service Information:
+					<service>
+					</service>
+					
+					Incident JSON:
+					{
+	 					"error":{
+	 						"message":"Your account is expired and cannot use the API."
+	 						, "code":2012
+	 					}
+					}
+				 */
+				
+				
+				JsonObject error= json.getObject("error", null);
+				
+				if (error != null) {
+					// there is an error object in the response data
+					int errorCode= error.get("code", 0);
+					String errorMessage= error.get("message", "no message");
+					
+					switch (errorCode) {
+					case 0:
+						// probably not an error... 
+						break;
+					case 2012:
+						if ("Your account is expired and cannot use the API.".equalsIgnoreCase(errorMessage)) {
+							// we know EXACTLY what this error is, and we should handle it gracefully.
+							// throw new PagerDutyApiException(error, errorCode, errorMessage);
+							errorMessage+= " Check your user account information [subdomain="+ getSubdomain() +" token="+ getApiToken() +"]";
+							throw new RuntimeException("ERR("+ errorCode +"): "+ errorMessage);
+						}
+						break;
+						
+					default:
+						throw new RuntimeException("ERR("+ errorCode +"): "+ errorMessage);
+					
+					}
+				}
+				
+				
 				return json;
 			}
 		}

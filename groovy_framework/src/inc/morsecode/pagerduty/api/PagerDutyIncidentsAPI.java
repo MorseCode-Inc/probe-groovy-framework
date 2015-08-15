@@ -12,6 +12,51 @@ import util.json.JsonObject;
 import util.json.JsonValue;
 import util.json.ex.MalformedJsonException;
 
+/**
+ *  &copy; MorseCode Incorporated 2015<br/>
+ * =--------------------------------=<br/><pre>
+ * Created: Aug 14, 2015
+ * Project: probe-pager-duty-gateway
+ * 
+ *
+ * Description:
+ * 
+ * </pre>
+ * =--------------------------------=
+ * @author nwhitney
+ * 
+ * <pre>
+ * PagerDuty JSON Structure:
+ *   
+ * {
+	  "id": "PIJ90N7",
+	  "incident_number": 1,
+	  "created_on": "2012-12-22T00:35:21Z",
+	  "status": "triggered",
+	  "pending_actions": [ 
+	  	{ "type": "escalate", "at": "2014-01-01T08:00:00Z" },
+	    { "type": "unacknowledge", "at": "2014-01-01T08:00:00Z" },
+	    { "type": "resolve", "at": "2014-01-01T08:00:00Z" }
+	  ],
+	  "html_url": "https://acme.pagerduty.com/incidents/PIJ90N7",
+	  "incident_key": null,
+	  "service": { "id": "PBAZLIU", "name": "service", "html_url": "https://acme.pagerduty.com/services/PBAZLIU" },
+	  "assigned_to_user": {  "id": "PPI9KUT", "name": "Alan Kay", "email": "alan@pagerduty.com", "html_url": "https://acme.pagerduty.com/users/PPI9KUT" },
+	  "assigned_to": [
+	    { 
+	      "at": "2012-12-22T00:35:21Z",
+	      "object": { "id": "PPI9KUT", "name": "Alan Kay", "email": "alan@pagerduty.com", "html_url": "https://acme.pagerduty.com/users/PPI9KUT", "type": "user" }
+	    }
+	  ],
+	  "trigger_summary_data": { "subject": "45645" },
+	  "trigger_details_html_url": "https://acme.pagerduty.com/incidents/PIJ90N7/log_entries/PIJ90N7",
+	  "last_status_change_on": "2012-12-22T00:35:22Z",
+	  "last_status_change_by": null
+	}
+	</pre>
+ *
+ */
+
 public class PagerDutyIncidentsAPI {
 	
 	public static final String GET = "GET";
@@ -93,40 +138,79 @@ public class PagerDutyIncidentsAPI {
 	
 	
 	public PDIncident getIncident(String id) throws IOException, MalformedJsonException {
-		
+		// Show detailed information about an incident.
+		// Accepts either an incident id, or an incident number.
+		// API page:
+		// https://developer.pagerduty.com/documentation/rest/incidents/show
+		// resource URL:
+		// GET https://<subdomain>.pagerduty.com/api/v1/incidents/:id
 		String uri = "/api/v1/incidents";
 		
 		JsonObject data= client.call(GET, uri+ "/"+ id, null, null);
 		
-		JsonArray array= (JsonArray)data.get("services", new JsonArray());
-		ListResult<PDIncident> incidents= new ListResult<PDIncident>(data.get("total", 0));
+		/*
+		 * BCM: Nate, below you had this line of code:
+		 * PDIncident incident= new PDIncident(data.getObject(id));
+		 * 
+		 * the data structure returned from pagerduty looks like this:
+		 * 
+		 * {
+				  "id": "PIJ90N7",
+				  "incident_number": 1,
+				  "created_on": "2012-12-22T00:35:21Z",
+				  "status": "triggered",
+				  "pending_actions": [ 
+				  	{ "type": "escalate", "at": "2014-01-01T08:00:00Z" },
+				    { "type": "unacknowledge", "at": "2014-01-01T08:00:00Z" },
+				    { "type": "resolve", "at": "2014-01-01T08:00:00Z" }
+				  ],
+				  "html_url": "https://acme.pagerduty.com/incidents/PIJ90N7",
+				  "incident_key": null,
+				  "service": { "id": "PBAZLIU", "name": "service", "html_url": "https://acme.pagerduty.com/services/PBAZLIU" },
+				  "assigned_to_user": {  "id": "PPI9KUT", "name": "Alan Kay", "email": "alan@pagerduty.com", "html_url": "https://acme.pagerduty.com/users/PPI9KUT" },
+				  "assigned_to": [
+				    { 
+				      "at": "2012-12-22T00:35:21Z",
+				      "object": { "id": "PPI9KUT", "name": "Alan Kay", "email": "alan@pagerduty.com", "html_url": "https://acme.pagerduty.com/users/PPI9KUT", "type": "user" }
+				    }
+				  ],
+				  "trigger_summary_data": { "subject": "45645" },
+				  "trigger_details_html_url": "https://acme.pagerduty.com/incidents/PIJ90N7/log_entries/PIJ90N7",
+				  "last_status_change_on": "2012-12-22T00:35:22Z",
+				  "last_status_change_by": null
+				}
+		 */
+		// PDIncident incident= new PDIncident(data.getObject(id));
+		// the JSON that is in the data variable represents a single incident
+		PDIncident incident= new PDIncident(data);
 		
-		for(JsonValue obj : array) {
-			if (obj instanceof JsonObject) {
-				PDIncident incident= new PDIncident((JsonObject)obj);
-				incidents.add(incident);
-			}
-		}
+		String incidentNumber = incident.get("id");
 		
-		return incidents;
+		System.out.println("Incident ID: "+ id);
+		System.out.println("Incident Service Information:\n"+ incident.getService());
+		System.out.println("Incident JSON:\n"+ data.toString());
+		
+		return incident;
 	}
 	
 	public int getIncidentCount() throws IOException, MalformedJsonException {
+		// Use this query for the count of incidents that match a given query.
+		// This should be used if you don't need access to the actual incident details. 
+		// API page:
+		// https://developer.pagerduty.com/documentation/rest/incidents/count
+		// resource URL:
+		// GET https://<subdomain>.pagerduty.com/api/v1/incidents/count
+		String uri = "/api/v1/incidents";
 		
+		JsonObject data= client.call(GET, uri+ "/count", null, null);
 		
-		JsonObject data= client.call(GET, "/api/v1/incidents" +"/count", null, null);
+		int count= data.get("", getIncidentCount());
+		//ListResult<PDIncident> all= listIncidents(0, 10);
+		//int total= all.getCount();
 		
-		JsonArray array= (JsonArray)data.get("services", new JsonArray());
-		ListResult<PDIncident> incidents= new ListResult<PDIncident>(data.get("total", 0));
+		System.out.println("incident count:"+ count);
 		
-		for(JsonValue obj : array) {
-			if (obj instanceof JsonObject) {
-				PDIncident incident= new PDIncident((JsonObject)obj);
-				incidents.add(incident);
-			}
-		}
-		
-		return incidents;
+		return count;
 	}
 	
 	

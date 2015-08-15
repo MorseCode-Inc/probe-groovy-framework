@@ -25,6 +25,24 @@ import inc.morsecode.pagerduty.PDConstants.EventType;
  * </pre></br>
  * =--------------------------------=
  */
+
+
+/**
+ * 
+ * 
+ * &copy; MorseCode Incorporated 2015<br/>
+ * =--------------------------------=<br/><pre>
+ * Created: Aug 14, 2015
+ * Project: probe-pager-duty-gateway
+ * 
+ *
+ * Description:
+ * 
+ * </pre>
+ * =--------------------------------=
+ * @author nwhitney
+ *
+ */
 public class PDIncident extends NDS {
 	
 
@@ -54,7 +72,30 @@ public class PDIncident extends NDS {
 	
 	public NDS getEscalationPolicy() { return seek("escalation_policy", true); }
 	public NDS getTeams() { return seek("teams", true); }
+	
+	
+	
+	/**
+	 *
+	 * 	  "assigned_to": [
+				    {
+				      "at": "2012-12-22T00:35:21Z",
+				      "object": {
+				        "id": "PPI9KUT",
+				        "name": "Alan Kay",
+				        "email": "alan@pagerduty.com",
+				        "html_url": "https://acme.pagerduty.com/users/PPI9KUT",
+				        "type": "user"
+				      }
+				    }
+				  ]
+				  
+	 * @return
+	 */
 	public NDS getAssignedTo() { return seek("assigned_to", true); }
+	
+	
+	
 	public NDS getAssignedToUser() { return seek("assigned_to_user", true); }
 	public NDS getAcknowledgers() { return seek("acknowledgers", true); }
 	public NDS getLastStatusChangeOn() { return seek("last_status_change_on", true); }
