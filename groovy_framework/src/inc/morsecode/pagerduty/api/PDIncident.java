@@ -96,7 +96,10 @@ public class PDIncident extends NDS {
 	
 	
 	
-	public NDS getAssignedToUser() { return seek("assigned_to_user", true); }
+	public PDUser getAssignedToUser() { return new PDUser(seek("assigned_to_user", true)); }
+	
+	
+	
 	public NDS getAcknowledgers() { return seek("acknowledgers", true); }
 	public NDS getLastStatusChangeOn() { return seek("last_status_change_on", true); }
 	public NDS getLastStatusChangeBy() { return seek("last_status_change_by", true); }

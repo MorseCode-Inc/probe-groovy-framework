@@ -168,6 +168,14 @@ public class PagerDutyIncidentsAPI {
 				  "incident_key": null,
 				  "service": { "id": "PBAZLIU", "name": "service", "html_url": "https://acme.pagerduty.com/services/PBAZLIU" },
 				  "assigned_to_user": {  "id": "PPI9KUT", "name": "Alan Kay", "email": "alan@pagerduty.com", "html_url": "https://acme.pagerduty.com/users/PPI9KUT" },
+				  
+				  JsonData data= {}
+				  PDUser assignedTo= new PDUser(data.getObject("assigned_to_user"));
+				  
+				  String username= assignedTo.getUserName();
+				  String username= assignedTo.get("name");
+				  JsonObject json= assignedTo.toJson();
+				  
 				  "assigned_to": [
 				    { 
 				      "at": "2012-12-22T00:35:21Z",
