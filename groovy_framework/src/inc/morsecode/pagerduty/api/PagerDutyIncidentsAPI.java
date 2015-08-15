@@ -204,15 +204,19 @@ public class PagerDutyIncidentsAPI {
 		
 		JsonObject data= client.call(GET, uri+ "/count", null, null);
 		
-		int count= data.get("", getIncidentCount());
+		int count= data.get("total", 0);
 		//ListResult<PDIncident> all= listIncidents(0, 10);
 		//int total= all.getCount();
 		
-		System.out.println("incident count:"+ count);
+		//System.out.println("incident count:"+ count);
 		
 		return count;
 	}
 	
+	
+	public boolean resolve(String id, PDUser user) {
+		
+	}
 	
 	/*
 	public JsonObject triggerNewIncident(PDService service, JsonArray contexts, UIMAlarmMessage alarm) throws IOException, MalformedJsonException {

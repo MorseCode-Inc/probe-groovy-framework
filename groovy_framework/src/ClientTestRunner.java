@@ -29,6 +29,9 @@ public class ClientTestRunner {
 		
 		
 		incidents.getIncident("1");
+		incidents.getIncidentCount();
+		
+		//can have print here
 	}
 
 }
