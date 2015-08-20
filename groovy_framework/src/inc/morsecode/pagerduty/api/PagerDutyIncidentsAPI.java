@@ -60,6 +60,7 @@ import util.json.ex.MalformedJsonException;
 public class PagerDutyIncidentsAPI {
 	
 	public static final String GET = "GET";
+	public static final String PUT = "PUT";
 	private PDClient client;
 	private static final String CONTEXT= "incidents";
 	
@@ -222,8 +223,26 @@ public class PagerDutyIncidentsAPI {
 	}
 	
 	
-	public boolean resolve(String id, PDUser user) {
+	/**
+	 * REF https://developer.pagerduty.com/documentation/rest/incidents/resolve
+	 * 
+	 * @param incident
+	 * @param user
+	 * @return
+	 * @throws IOException
+	 * @throws MalformedJsonException
+	 */
+	public boolean resolve(PDIncident incident, PDUser user) throws IOException, MalformedJsonException {
 		
+		String uri = "/api/v1/incidents";
+		// PUT https://<subdomain>.pagerduty.com/api/v1/incidents/:id/resolve
+		NDS params= new NDS();
+		params.set("requester_id", user.getUserId());
+		JsonObject data= client.call(PUT, uri + "/"+ incident.getId() +"/resolve", null, params);
+		
+		System.out.println(data);
+		
+		return true;
 	}
 	
 	/*

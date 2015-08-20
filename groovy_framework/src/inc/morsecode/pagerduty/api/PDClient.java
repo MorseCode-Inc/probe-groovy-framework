@@ -224,7 +224,7 @@ public class PDClient {
 		HttpRequest request= null;
 		
 		if ("put".equalsIgnoreCase(httpMethod)) {
-			request= buildPostRequest(uri, data, params, auth);
+			request= put(uri, data, params, auth);
 		} else if ("get".equalsIgnoreCase(httpMethod)) {
 			request= get(uri, params, auth);
 		} else if ("delete".equalsIgnoreCase(httpMethod)) {

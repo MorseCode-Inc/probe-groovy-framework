@@ -92,11 +92,24 @@ public class PDIncident extends NDS {
 				  
 	 * @return
 	 */
-	public NDS getAssignedTo() { return seek("assigned_to", true); }
+	public IncidentAssignedTo getAssignedTo() { return new IncidentAssignedTo(seek("assigned_to", true)); }
 	
 	
 	
-	public PDUser getAssignedToUser() { return new PDUser(seek("assigned_to_user", true)); }
+	public PDUser getAssignedToUser() { 
+		return new PDUser(seek("assigned_to_user", true)); 
+	}
+	
+	public String getIncidentKey() { return get("incident_key"); }
+	
+	public String getDateRange() { return get("date_range"); }
+	public String getDateRangeSince() { return get("since"); }
+	public String getDateRangeUntil() { return get("until"); }
+	
+	public String getFields() { return get("fields"); }
+	// Defaults to UTC. https://developer.pagerduty.com/documentation/rest/types#timezone
+	public String getTimeZone() { return get("time_zone"); }
+	public String getSortBy() { return get("sort_by"); }
 	
 	
 	
@@ -112,6 +125,10 @@ public class PDIncident extends NDS {
 		JsonObject json= super.toJson();
 		
 		return json;
+	}
+
+	public String getId() {
+		return this.get("id");
 	}
 
 	

@@ -16,10 +16,6 @@ public class ClientTestRunner {
 	public static void main(String[] args) throws IOException, MalformedJsonException {
 
 		/*
-		 * Nate: 
-		 * I wrote this as a 
-		 * 
-		 * 
 		 * 
 		 */
 		
@@ -28,8 +24,14 @@ public class ClientTestRunner {
 		PagerDutyIncidentsAPI incidents= new PagerDutyIncidentsAPI(client);
 		
 		
-		incidents.getIncident("1");
+		incidents.getIncident("4");
 		incidents.getIncidentCount();
+		
+		
+		System.out.println(incidents.getIncident("4").getAssignedTo());
+		
+		System.out.println(incidents.getIncident("4").getAssignedTo().getFistAssignedUser());
+		
 		
 		//can have print here
 	}

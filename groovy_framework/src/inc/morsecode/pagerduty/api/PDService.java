@@ -72,16 +72,40 @@ public class PDService extends NDS {
 		super(name, json);
 	}
 
+	// PagerDuty GET services JSON API calls for
+	// https://developer.pagerduty.com/documentation/rest/services/list
 	public String getId() { return get("id"); }
 	public String getServiceKey() { return get("service_key"); }
 	public String getServiceUrl() { return get("service_url"); }
 	public String getName() { return get("name"); }
 	public String getCreatedAt() { return get("created_at"); }
+	
+	public NDS getEscalationPolicy() { return seek("escalation_policy", true); }
 	public String getEmailFilterMode() { return get("email_filter_mode"); }
+	public NDS getEmailFilters() { return seek("email_filters", true); }
 	public String getPDType() { return get("type"); }
-	public int getAcknowledgement_timeout() { return get("acknowledgement_timeout", 1800); }
+	public int getAcknowledgementTimeout() { return get("acknowledgement_timeout", 1800); }
 	public int getAutoResolveTimeout() { return get("auto_resolve_timeout", 14400); }
 	public String getStatus() { return get("status"); }
+	
+	public String getLastIncidentTimeStamp() { return get("last_incident_timestamp"); }
+	public String getEmailIncidentCreation() { return get("email_incident_creation"); }
+	public String getSeverityFilter() { return get("severity_filter"); }
+	
+	// Parameters, as opposed to Response Fields
+	public String getTeams() { return get("teams"); }
+	public String getTimeZone() { return get("time_zone"); }
+	public String getQuery() { return get("query"); }
+	public String getSortBy() { return get("sort_by"); }
+	
+	// PagerDuty GET services/:id
+	// https://developer.pagerduty.com/documentation/rest/services/show
+	// Include extra information in the response.
+	// Possible values are escalation_policy and email_filters
+	public String getIncludeExtraInfo() { return get("include"); }
+	
+	// PagerDuty JSON API calls for
+	// https://developer.pagerduty.com/documentation/integration/events/trigger
 	public String getEventType() { return get("event_type"); }
 	public String getDescription() { return get("description"); }
 	public String getIncidentKey() { return get("incident_key"); }
@@ -95,7 +119,7 @@ public class PDService extends NDS {
 	public int getCountTotalIncidents() { return getIncidentCounts().get("total", 0); }
 	public int getCountResolvedIncidents() { return getIncidentCounts().get("resolved", 0); }
 	public int getCountAcknowledgedIncidents() { return getIncidentCounts().get("acknowledged", 0); }
-	public int getCounttriggeredIncidents() { return getIncidentCounts().get("triggered", 0); }
+	public int getCountTriggeredIncidents() { return getIncidentCounts().get("triggered", 0); }
 	
 	public JsonObject getDetails() {
 		JsonObject details= new JsonObject();

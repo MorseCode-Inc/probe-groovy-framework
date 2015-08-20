@@ -65,5 +65,7 @@ public class PDUser extends NDS {
 	
 	public String getUserName() { return this.get("name"); }
 	public void setUserName(String name) { this.set("name", name); }
+
+	public String getUserId() { return this.get("id"); }
 	
 }
