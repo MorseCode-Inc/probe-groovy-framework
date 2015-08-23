@@ -2,6 +2,7 @@ import java.io.IOException;
 
 import util.json.ex.MalformedJsonException;
 import inc.morsecode.pagerduty.api.PDClient;
+import inc.morsecode.pagerduty.api.PDIncident;
 import inc.morsecode.pagerduty.api.PagerDutyIncidentsAPI;
 
 
@@ -24,13 +25,13 @@ public class ClientTestRunner {
 		PagerDutyIncidentsAPI incidents= new PagerDutyIncidentsAPI(client);
 		
 		
-		incidents.getIncident("4");
+		PDIncident incident= incidents.getIncident("4");
+		
 		incidents.getIncidentCount();
 		
 		
-		System.out.println(incidents.getIncident("4").getAssignedTo());
+		System.out.println(incidents.getIncident("4"));
 		
-		System.out.println(incidents.getIncident("4").getAssignedTo().getFistAssignedUser());
 		
 		
 		//can have print here

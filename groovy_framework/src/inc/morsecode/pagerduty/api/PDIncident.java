@@ -92,7 +92,7 @@ public class PDIncident extends NDS {
 				  
 	 * @return
 	 */
-	public IncidentAssignedTo getAssignedTo() { return new IncidentAssignedTo(seek("assigned_to", true)); }
+	// public IncidentAssignedTo getAssignedTo() { return new IncidentAssignedTo(seek("assigned_to", true)); }
 	
 	
 	
