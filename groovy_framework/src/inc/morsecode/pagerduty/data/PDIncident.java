@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty.api;
+package inc.morsecode.pagerduty.data;
 
 /**
  * 
@@ -54,7 +54,16 @@ public class PDIncident extends NDS {
 	  * @param json
 	  */
 	public PDIncident(JsonObject json) {
-		super(json.get("incident_number", "incident"), json);
+		super(json.get("id", "incident"), json);
+	}
+	
+	public PDIncident(String id) {
+		super(id);
+		setId(id);
+	}
+
+	public void setId(String id) {
+		set("id", id);
 	}
 
 	public String getIncidentNumber() { return get("incident_number"); }

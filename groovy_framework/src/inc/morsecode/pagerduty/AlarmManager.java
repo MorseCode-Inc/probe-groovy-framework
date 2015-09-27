@@ -10,10 +10,11 @@ import inc.morsecode.nas.UIMAlarmClose;
 import inc.morsecode.nas.UIMAlarmNew;
 import inc.morsecode.nas.UIMAlarmUnassign;
 import inc.morsecode.nas.UIMAlarmUpdate;
+import inc.morsecode.pagerduty.api.IncidentUpdateParameters;
 import inc.morsecode.pagerduty.api.PDClient;
-import inc.morsecode.pagerduty.api.PDService;
-import inc.morsecode.pagerduty.api.PDTriggerEvent;
 import inc.morsecode.pagerduty.api.PagerDutyIncidentsAPI;
+import inc.morsecode.pagerduty.data.PDService;
+import inc.morsecode.pagerduty.data.PDTriggerEvent;
 
 /**
  * 
@@ -30,17 +31,23 @@ import inc.morsecode.pagerduty.api.PagerDutyIncidentsAPI;
 public class AlarmManager {
 
 	private NDS alarms= new NDS("alarms");
+	//private Probe probe;
 
 	private ServiceMapper smap;
 	
 	private PDClient client;
 	
-	public AlarmManager(PDClient client, ServiceMapper smap) {
+	private AssignmentTriggers assignmentTriggers;
+	private AlarmTriggersConfig alarmTriggers;
+	
+	public AlarmManager(AlarmTriggersConfig alarmTriggers, AssignmentTriggers assignmentTriggers, PDClient client, ServiceMapper smap) {
 		this.client= client.newInstance();
 		this.smap= smap;
+		this.alarmTriggers= alarmTriggers;
+		this.assignmentTriggers= assignmentTriggers;
 	}
-	
-	
+
+
 	public NDS getNDS() { return new NDS(alarms, false); }
 	public String toString() { return alarms.toString(); }
 
@@ -105,7 +112,7 @@ public class AlarmManager {
 		
 // for now limit what is sent to PD
 if (!"outpost".equals(alarm.getAlarmRobot())) { return; }
-if (!"http_gateway".equals(alarm.getAlarmPrid())) { return; }
+if (!"httpgtw".equals(alarm.getAlarmPrid())) { return; }
 		
 		try {
 			client.incidents().send(event);
@@ -126,6 +133,15 @@ if (!"http_gateway".equals(alarm.getAlarmPrid())) { return; }
 		// System.out.println("body: \n"+ alarm.getBody());
 		// System.out.println("message: \n"+ alarm.toJson());
 		// System.out.println();
+		
+
+		PagerDutyIncidentsAPI incidents= new PagerDutyIncidentsAPI(client);
+		
+		IncidentUpdateParameters params= new IncidentUpdateParameters();
+		
+		// incidents.update(user.getId(), params);
+		// System.out.println(urls.getEventTrigger(client, event));
+		
 	}
 	
 	public void handle(UIMAlarmClose alarm) {
@@ -140,9 +156,45 @@ if (!"http_gateway".equals(alarm.getAlarmPrid())) { return; }
 	public void handle(UIMAlarmAssign alarm) {
 		
 		System.out.println("ASSIGN [alarm:"+ alarm.getNimid() +"] "+ alarm);
+		
+		String assignedToUimUser= alarm.getAlarmAssignedTo();
+		
+		for (AssignmentTrigger config : assignmentTriggers) {
+			if (!config.isActive()) { continue; }
+			String username= config.getUimUsername(null);
+			
+			if (username == null) {
+				System.err.println("Missing required username for alarm trigger configuration: "+ config.getName());
+				continue;
+			}
+			
+			String defaultServiceKey= null; // TODO: FIGURE OUT THIS
+			String serviceKey= config.getServiceKey(defaultServiceKey);
+			
+			if (serviceKey == null || "".equals(serviceKey)) {
+				System.err.println("Missing required service_key for alarm trigger configuration: "+ config.getName());
+				continue;
+			}
+			
+			if (username.equals(assignedToUimUser)) {
+				
+				
+				PDService service= smap.get(serviceKey);
+				
+				PDTriggerEvent event= new PDTriggerEvent(service, alarm);
+				
+				
+				client.incidents().send(event);
+				
+				
+				
+			}
+			
+		}
+		
 		// System.out.println("subject: "+ message.getSubject());
 		// System.out.println("body: \n"+ message.getBody());
-		// System.out.println("message: \n"+ message.toJson());
+		System.out.println("message: \n"+ alarm.toJson());
 		//System.out.println();
 	}
 	

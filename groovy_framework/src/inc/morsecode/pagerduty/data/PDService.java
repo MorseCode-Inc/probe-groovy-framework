@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty.api;
+package inc.morsecode.pagerduty.data;
 
 /**
  * 
@@ -12,6 +12,7 @@ import util.json.JsonArray;
 import util.json.JsonObject;
 import inc.morsecode.NDS;
 import inc.morsecode.pagerduty.PDConstants.EventType;
+import inc.morsecode.pagerduty.api.PDContext;
 
 /**
  * 

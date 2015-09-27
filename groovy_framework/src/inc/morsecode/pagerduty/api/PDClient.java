@@ -40,23 +40,35 @@ public class PDClient {
 	
 	private PagerDutyIncidentsAPI incidents;
 	private PagerDutyServicesAPI servicesApi;
+	private PDServiceUrls urls;
+	private String userid;
 	
-	public PDClient(String subdomain, String apiKey) {
-		this(subdomain, "pagerduty.com", apiKey);
+	public PDClient(String subdomain, String apiKey, PDServiceUrls urls, String userid) {
+		this(subdomain, "pagerduty.com", apiKey, urls, userid);
 	}
 	
-	public PDClient(String subdomain, String domain, String apiKey) {
+	public PDClient(String subdomain, String domain, String apiKey, PDServiceUrls urls, String userid) {
 		this.services= data.seek("services", true);
+		this.urls= urls;
 		data.set("subdomain", subdomain);
 		data.set("domain", domain);
 		data.set("auth/api_key", apiKey);
+		data.set("auth/userid", userid);
 		
 		this.restlet= HttpClients.createDefault();
 		
 	}
 
+	public PDServiceUrls urls() {
+		return urls;
+	}
+	
 	public String getSubdomain() {
 		return data.get("subdomain", "events");
+	}
+	
+	public String getUserid() {
+		return data.get("auth/userid"); 
 	}
 	
 	public String getDomain() {
@@ -341,7 +353,7 @@ public class PDClient {
 	}
 
 	public PDClient newInstance() {
-		return new PDClient(getSubdomain(), getTopLevelDomain(), getApiToken());
+		return new PDClient(getSubdomain(), getTopLevelDomain(), getApiToken(), urls, getUserid());
 	}
 
 	public PagerDutyServicesAPI services() {

@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty.api;
+package inc.morsecode.pagerduty.data;
 
 import java.util.Map;
 
@@ -35,8 +35,9 @@ public class PDUser extends NDS {
 	public PDUser() {
 	}
 
-	public PDUser(String name) {
-		super(name);
+	public PDUser(String userid) {
+		super("user");
+		set("id", userid);
 	}
 
 	public PDUser(Map<String, Object> map) {
@@ -66,6 +67,6 @@ public class PDUser extends NDS {
 	public String getUserName() { return this.get("name"); }
 	public void setUserName(String name) { this.set("name", name); }
 
-	public String getUserId() { return this.get("id"); }
+	public String getId() { return this.get("id"); }
 	
 }

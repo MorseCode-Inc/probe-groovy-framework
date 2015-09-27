@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty.api;
+package inc.morsecode.pagerduty.data;
 
 import java.text.ParseException;
 import java.util.Date;

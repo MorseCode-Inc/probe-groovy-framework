@@ -17,8 +17,12 @@ import inc.morsecode.nas.UIMAlarmNew;
 import inc.morsecode.nas.UIMAlarmUnassign;
 import inc.morsecode.nas.UIMAlarmUpdate;
 import inc.morsecode.pagerduty.api.PDClient;
-import inc.morsecode.pagerduty.api.PDService;
+import inc.morsecode.pagerduty.api.PDServiceUrls;
 import inc.morsecode.pagerduty.api.PagerDutyServicesAPI;
+import inc.morsecode.pagerduty.api.PagerDutyUsersAPI;
+import inc.morsecode.pagerduty.data.PDService;
+import inc.morsecode.pagerduty.data.PDTriggerEvent;
+import inc.morsecode.pagerduty.data.PDUser;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -39,8 +43,10 @@ public class Probe extends HttpGateway implements MessageHandler {
 	private boolean started= false;
 	private int failures= 0;
 	private boolean firstboot= true;
+	private AssignmentTriggers assignmentTriggers;
+	private AlarmTriggersConfig alarmTriggers;
 	
-	public final static String PROBE_NAME= "pagerduty_gtw";
+	public final static String PROBE_NAME= "pagerdutygtw";
 	public final static String PROBE_VERSION= "0.12";
 	public final static String QOS_GROUP= "PagerDuty";
 	
@@ -48,6 +54,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 	
 	private PDClient client;
 	private ServiceMapper smap;
+	private PDServiceUrls urls;
 	
 	public Probe(String[] args) throws NimException {
 		super(PROBE_NAME, PROBE_VERSION, args);
@@ -60,16 +67,27 @@ public class Probe extends HttpGateway implements MessageHandler {
 		
 		// log.info(config.toString());
 		
-		String apiKey= pd.get("auth/api_key", "missing configuration key pagerduty/auth/api_key");
-		String rawApiKey= pd.get("auth/raw_api_key", null);
-		String subdomain= pd.get("auth/subdomain", "missing configuration key pagerduty/auth/api_key");
+		assignmentTriggers= new AssignmentTriggers(pd.seek("assignment_triggers", true));
+		alarmTriggers= new AlarmTriggersConfig(pd.seek("alarm_triggers", true));
 		
-		if ("missing configuration key pagerduty/auth/api_key".equals(subdomain)) {
+	
+		String apiKey= pd.get("auth/api_key", "missing configuration key pagerduty/auth/api_key");
+		String rawApiKey= pd.get("auth/_api_key", null);
+		String subdomain= pd.get("auth/subdomain", "missing configuration key pagerduty/auth/subdomain");
+		
+		if ("missing configuration key pagerduty/auth/api_key".equals(apiKey) && rawApiKey == null || "".equals(rawApiKey)) {
+			// missing subdomain
+			throw new RuntimeException("Missing required auth/api_key key in configuration under <pagerduty> section.");
+		}
+		
+		if ("missing configuration key pagerduty/auth/subdomain".equals(subdomain)) {
 			// missing subdomain
 			throw new RuntimeException("Missing required auth/subdomain key in configuration under <pagerduty> section.");
 		}
 		
 		apiKey= Decode.decode(apiKey);
+		
+		urls= new PDServiceUrls(pd.seek("service_urls"));
 		
 		
 		boolean isConfigured= pd.get("auth/confirmed", false);
@@ -79,7 +97,12 @@ public class Probe extends HttpGateway implements MessageHandler {
 			return false; 
 		}
 		
-		this.client = new PDClient(subdomain, apiKey);
+		String userid= pd.get("auth/userid");
+		
+		if (userid == null) {
+			
+		}
+		this.client = new PDClient(subdomain, apiKey, urls, userid);
 		
 		// System.out.println("decoded api key = "+ apiKey);
 		
@@ -158,9 +181,9 @@ public class Probe extends HttpGateway implements MessageHandler {
 		// NimSubscribe subscription= new NimSubscribe("/UIM/MORSECODE");
 		// subscription.subscribeForQueue(queuename, object, methodname);
 		
-		String clientName = "pagerduty_gtw";
+		String clientName = getProbeName();
 		String queue = config.get("setup/subscription/queue", "pagerduty");
-		int bulkSize = config.get("setup/subscription/bulk_size", 1);
+		int bulkSize = config.get("setup/subscription/bulk_size", 1, 1, 100);
 		
 		String address= config.get("setup/subscription/address", "/invalid/uim/address");
 
@@ -182,13 +205,13 @@ public class Probe extends HttpGateway implements MessageHandler {
 				} else if (nx.getCode() == 4) {
 					log.error("Queue Subscription Failure "+ address +" queue="+ queue +" [Not Found]");
 					log.error("Possible Causes:");
-					log.error("\t- Check that an attach queue exists on hub: "+ address +" named '"+ queue +"'");
-					log.error("\t- The configuration of this probe does not match your environment.");
+					log.error("\t Check that an attach queue exists on hub: "+ address +" named '"+ queue +"'");
+					log.error("\t The configuration of this probe does not match your environment.");
 				} else {
 					log.error("Queue Subscription Failure "+ address +" queue="+ queue +" ["+ nx.getMessage() +"]");
 					log.error("Possible Causes:");
-					log.error("\t- Reset the admin credentials for this probe using callback: set_admin");
-					log.error("\t- The configuration of this probe does not match your environment.");
+					log.error("\t Reset the admin credentials for this probe using callback: set_admin");
+					log.error("\t The configuration of this probe does not match your environment.");
 				}
 				
 				
@@ -220,10 +243,12 @@ public class Probe extends HttpGateway implements MessageHandler {
   			System.out.println("Loading...");
   			probe.registerCallback(probe, "reload", "reload");
   			probe.registerCallback(probe, "set_admin", "set_admin", new String[]{"username", "password", "confirm"});
-  			probe.registerCallback(probe, "set_api", "set_api", new String[]{"subdomain", "api_key", "tld"});
+  			probe.registerCallback(probe, "set_api", "set_api", new String[]{"userid", "subdomain", "api_key", "tld"});
+  			
+  			
   		
 
-  			probe.registerCallbackOnTimer(probe, "execute", 3000, true);
+  			probe.registerCallbackOnTimer(probe, "execute", getInterval(), true);
 			// probe.registerCallbackOnTimer(probe, "execute", getInterval(), true);
   			do {
   				
@@ -245,7 +270,7 @@ public class Probe extends HttpGateway implements MessageHandler {
 	@Override
 	public boolean handle(UIMMessage message) {
 		
-		AlarmManager alarmManager= new AlarmManager(client, smap);
+		AlarmManager alarmManager= new AlarmManager(alarmTriggers, assignmentTriggers, client, smap);
 		
 		
 		// FIRST: Decide if this message is even something we care about.
@@ -281,8 +306,14 @@ public class Probe extends HttpGateway implements MessageHandler {
 	
 	
 
-	public void set_api(NimSession session, String subdomain, String api_token, String tld, PDS args) throws NimException {
+	public void set_api(NimSession session, String userid, String subdomain, String api_token, String tld, PDS args) throws NimException {
 		NDS response= new NDS();
+		
+		if (userid == null || "".equals(userid)) {
+			response.set("status", "Error: userid cannot be empty or null.");
+			session.sendReply(0, response.toPDS());
+			return;
+		}
 		
 		if (subdomain == null || "".equals(subdomain)) {
 			response.set("status", "Error: subdomain cannot be empty or null.");
@@ -307,35 +338,58 @@ public class Probe extends HttpGateway implements MessageHandler {
 		try {
 			
 			
-			PDClient client= new PDClient(subdomain, tld, api_token);
-			PagerDutyServicesAPI services= new PagerDutyServicesAPI(client);
+			PDClient client= new PDClient(subdomain, tld, api_token, urls, userid);
+			
+			PagerDutyServicesAPI servicesAPI= new PagerDutyServicesAPI(client);
+			PagerDutyUsersAPI usersAPI= new PagerDutyUsersAPI(client);
 			
 			log.info("API Check <==> services.list [");
-			for (PDService service : services.listServices(0, 25)) {
+			for (PDService service : servicesAPI.listServices(0, 25)) {
 				log.info("\t"+ service.getId() +":"+ service.getName() +" "+ service.getServiceKey() +" ("+ service.getServiceUrl() +")");
 			}
 			log.info(" ]");
 			
 			
-			// we logged in, need to write to the configuration file somehow now.
-			NimRequest controller= new NimRequest("controller", "get_info");
+			try {
+				PDUser user= usersAPI.getUser(userid);
+				log.info("User Information: \n"+ user.toJson());
+				
+				// we logged in, need to write to the configuration file somehow now.
+				NimRequest controller= new NimRequest("controller", "get_info");
+				
+				// System.out.println("/pagerduty/auth/api_key= '"+ Encode.encode(api_token) +"'");
+				NDS status = writeConfig("/pagerduty/auth", "api_key", Encode.encode(api_token), controller);
+				status = writeConfig("/pagerduty/auth", "subdomain", subdomain, controller);
+				status = writeConfig("/pagerduty/auth", "userid", userid, controller);
+				status = writeConfig("/pagerduty/auth", "tld", tld, controller);
+				status = writeConfig("/pagerduty/auth", "confirmed", "yes", controller);
+				
+				status.setName("detail");
+				
+				System.out.println(status);
+				
+				response.add(status);
+				
+				response.set("status", "OK");
+				
+				controller.close();
+				
+				writeCache(getProbeName() +".pduser", user, true);
+				
+			} catch (RuntimeException x) {
+				response.set("status", "ERR");
+				response.set("message", "Invalid User Information: "+ userid);
+				response.set("reason", x.getMessage());
+				
+				log.error("Invalid User Information: "+ userid +" ["+ x.getMessage() +"]");
+				
+			}
 			
-			// System.out.println("/pagerduty/auth/api_key= '"+ Encode.encode(api_token) +"'");
-			NDS status = writeConfig("/pagerduty/auth", "api_key", Encode.encode(api_token), controller);
-			status = writeConfig("/pagerduty/auth", "subdomain", subdomain, controller);
-			status = writeConfig("/pagerduty/auth", "tld", tld, controller);
-			status = writeConfig("/pagerduty/auth", "confirmed", "yes", controller);
-			
-			status.setName("detail");
-			
-			System.out.println(status);
-			
-			response.add(status);
-			
-			response.set("status", "OK");
-			
-			controller.close();
+
 		} catch (Throwable anything) {
+			response.set("status", "ERR");
+			response.set("message", "Fatal Error");
+			response.set("reason", anything.getMessage());
 			
 			log.error("ERROR: "+ anything.toString());
 			

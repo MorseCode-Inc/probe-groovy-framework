@@ -4,8 +4,8 @@ import java.util.List;
 
 import inc.morsecode.NDS;
 import inc.morsecode.nas.UIMAlarmMessage;
-import inc.morsecode.pagerduty.api.PDService;
-import inc.morsecode.pagerduty.api.PDTriggerEvent;
+import inc.morsecode.pagerduty.data.PDService;
+import inc.morsecode.pagerduty.data.PDTriggerEvent;
 
 public class ServiceMapper {
 	
@@ -29,6 +29,11 @@ public class ServiceMapper {
 		
 		return true;
 		
+	}
+
+	public PDService get(String serviceKey) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,6 +3,9 @@ package inc.morsecode.pagerduty.api;
 import inc.morsecode.NDS;
 import inc.morsecode.core.ListResult;
 import inc.morsecode.nas.UIMAlarmMessage;
+import inc.morsecode.pagerduty.data.PDIncident;
+import inc.morsecode.pagerduty.data.PDTriggerEvent;
+import inc.morsecode.pagerduty.data.PDUser;
 
 import java.io.IOException;
 import java.util.List;
@@ -237,7 +240,7 @@ public class PagerDutyIncidentsAPI {
 		String uri = "/api/v1/incidents";
 		// PUT https://<subdomain>.pagerduty.com/api/v1/incidents/:id/resolve
 		NDS params= new NDS();
-		params.set("requester_id", user.getUserId());
+		params.set("requester_id", user.getId());
 		JsonObject data= client.call(PUT, uri + "/"+ incident.getId() +"/resolve", null, params);
 		
 		System.out.println(data);
@@ -268,7 +271,7 @@ public class PagerDutyIncidentsAPI {
 		// required
 		json.set("service_key", serviceKey);
 		json.set("event_type", "trigger");
-		json.set("description", "ALert Message Description");
+		json.set("description", "Alert Message Description");
 		
 		// optional, but we will set the incident key to keep mapping back to nimsoft
 		json.set("incident_key", alarm.getNimid());
@@ -293,21 +296,30 @@ public class PagerDutyIncidentsAPI {
 		}
 		return json;
 	}
+	
 
 	public JsonObject send(PDTriggerEvent event) throws IOException, MalformedJsonException {
 		
 		
 		// String uri= "/"+ service.getServiceKey() +"/events/enqueue";
 		String uri= event.getService().getServiceKey() +"/events/enqueue";
+		
+		uri= client.urls().getEventTrigger(client, event);
+		
 		// HttpRequest request= client.put("/incidents", json);
 		// HttpRequest request= client.buildPostRequest( , json, null);
-		uri= "https://events.pagerduty.com/generic/2010-04-15/create_event.json";
-		uri= "https://redonkulizer-toy.herokuapp.com/redonkulize/passthrough/"+ event.getServiceKey();
+		//uri= "https://events.pagerduty.com/generic/2010-04-15/create_event.json";
+		//uri= "https://redonkulizer-toy.herokuapp.com/redonkulize/passthrough/"+ event.getServiceKey();
+		//uri= triggerUrl(event);
 		System.out.println("SEND TRIGGER:\n"+ event);
 		
 		JsonObject resp= client.call("post", uri, event.toJson(), null, false);
 		// HttpResponse resp= client.execute((HttpUriRequest)request);
 		System.out.println("RESPONSE: \n"+ resp);
 		return resp;
+	}
+
+	public void update(IncidentUpdateParameters params) {
+		
 	}
 }

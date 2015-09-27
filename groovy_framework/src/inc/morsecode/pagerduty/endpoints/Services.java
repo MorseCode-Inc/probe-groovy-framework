@@ -10,7 +10,7 @@ import inc.morsecode.core.Endpoint;
 import inc.morsecode.core.HttpGateway;
 import inc.morsecode.pagerduty.Probe;
 import inc.morsecode.pagerduty.api.PDClient;
-import inc.morsecode.pagerduty.api.PDService;
+import inc.morsecode.pagerduty.data.PDService;
 import inc.morsecode.probes.http_gateway.CGI;
 
 public class Services extends Endpoint {

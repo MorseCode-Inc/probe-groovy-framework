@@ -30,6 +30,10 @@ public class UIMAlarmMessage extends UIMMessage {
 	public static final String NAS = "nas";
 	public static final String ROWID = "rowid";
 	
+	public static final String ASSIGNED_TO = "assigned_to";
+	public static final String ASSIGNED_BY = "assigned_by";
+	public static final String ASSIGNED_AT = "assigned_at";
+	
 	public static final String OSUSER1 = "user_tag1";
 	public static final String OSUSER2 = "user_tag2";
 	
@@ -44,6 +48,10 @@ public class UIMAlarmMessage extends UIMMessage {
 	}
 
 	public String getAlarmSid() { return get("udata/"+ SID); }
+	
+	public String getAlarmAssignedTo() { return get("udata/"+ ASSIGNED_TO); }
+	public String getAlarmAssignedAt() { return get("udata/"+ ASSIGNED_AT); }
+	public String getAlarmAssignedBy() { return get("udata/"+ ASSIGNED_BY); }
 
 	public String getAlarmNimts() { return get("udata/"+ NIMTS); }
 

@@ -252,7 +252,13 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 		}
 		*/
 		
-		probeCycle();
+		try {
+			probeCycle();
+		} catch (Throwable anything) {
+			log.error("Error during probe execution cycle: "+ anything.getClass());
+			log.error(anything.getMessage());
+			anything.printStackTrace();
+		}
 		
 	}
 
@@ -792,7 +798,11 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	
 	public void writeCache(Endpoint endpoint, String key, NDS value, boolean flush) {
 		String namespace = endpoint.getClass().getName() +"/"+ key;
-	// System.err.println("WRITE Namespace = "+ namespace +", value.name = "+ value.getName());
+		writeCache(namespace, value, flush);
+	}
+
+	public void writeCache(String namespace, NDS value, boolean flush) {
+		// System.err.println("WRITE Namespace = "+ namespace +", value.name = "+ value.getName());
 		persistentData.seek(namespace, true).add(value);
 		// persistentData.set(namespace, value);
 		flushCache= flush;		// signal that an update was made to the cache and it should be written to disk
@@ -808,6 +818,9 @@ public abstract class HttpGateway extends NimProbe implements org.apache.catalin
 	}
 	public NDS readCache(Endpoint endpoint, String key, boolean autoCreate) {
 		return persistentData.seek(endpoint.getClass().getCanonicalName() +"/"+ key, autoCreate);
+	}
+	public NDS readCache(String namespace, String key, boolean autoCreate) {
+		return persistentData.seek(namespace +"/"+ key, autoCreate);
 	}
 	
 	public NDS deleteCache(Endpoint endpoint) {

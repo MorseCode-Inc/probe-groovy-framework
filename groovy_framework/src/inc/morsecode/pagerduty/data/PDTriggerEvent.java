@@ -1,4 +1,4 @@
-package inc.morsecode.pagerduty.api;
+package inc.morsecode.pagerduty.data;
 
 import java.util.Map;
 
@@ -8,10 +8,9 @@ import inc.morsecode.NDS;
 import inc.morsecode.nas.UIMAlarmMessage;
 import inc.morsecode.pagerduty.Probe;
 
-public class PDTriggerEvent {
+public class PDTriggerEvent extends NDS {
 	
 	private PDService service;
-	private NDS data;
 	
 	public static final String SERVICE_KEY= "service_key";
 	public static final String EVENT_TYPE= "event_type";
@@ -23,7 +22,7 @@ public class PDTriggerEvent {
 	public static final String CONTEXTS= "contexts";
 
 	public PDTriggerEvent(PDService service, UIMAlarmMessage alarm) {
-		this.data= new NDS();
+		
 		this.service= service;
 		
 		setEventType("trigger");
@@ -40,27 +39,26 @@ public class PDTriggerEvent {
 	}
 	
 	
+	/*
 	public JsonObject toJson() {
-		JsonObject json= data.toJson();
+		JsonObject json= toJson();
 		return json;
 	}
+	*/
 
 	
-	public String getServiceKey() { return data.get(SERVICE_KEY); }
+	public String getServiceKey() { return get(SERVICE_KEY); }
 	
-	public String getEventType() { return data.get(SERVICE_KEY); }
-	public String getDescription() { return data.get(SERVICE_KEY); }
-	public String getIncidentKey() { return data.get(SERVICE_KEY); }
+	public String getEventType() { return get(SERVICE_KEY); }
+	public String getDescription() { return get(SERVICE_KEY); }
+	public String getIncidentKey() { return get(SERVICE_KEY); }
 	
-	public String getClient() { return data.get(SERVICE_KEY); }
-	public String getClientUrl() { return data.get(SERVICE_KEY); }
+	public String getClient() { return get(SERVICE_KEY); }
+	public String getClientUrl() { return get(SERVICE_KEY); }
 	
-	public NDS getDetails() { return data.seek(DETAILS, true); }
-	public NDS getContexts() { return data.seek(CONTEXTS, true); }
+	public NDS getDetails() { return seek(DETAILS, true); }
+	public NDS getContexts() { return seek(CONTEXTS, true); }
 	
-	public void set(String key, String value) {
-		data.set(key, value);
-	}
 	
 	public void setServiceKey(String value) { set(SERVICE_KEY, value); }
 	public void setEventType(String value) { set(EVENT_TYPE, value); }
@@ -71,10 +69,10 @@ public class PDTriggerEvent {
 	public void setDetails(NDS value) { 
 		NDS nds= new NDS(value, false);		// make a copy, true copy
 		nds.setName("details");
-		data.set(DETAILS, nds);
+		set(DETAILS, nds);
 	}
 	
 	public String toString() {
-		return data.toJson().toString();
+		return toJson().toString();
 	}
 }
